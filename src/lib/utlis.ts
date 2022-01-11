@@ -192,7 +192,7 @@ export async function sendDiscordMessage(
   const discordChannelId = config.get('discordChannelId')
   const discordToken = config.get('discordToken')
   const response = await axios.post(
-    `http://discord.com/api/channels/${discordChannelId}/messages`,
+    `https://discord.com/api/channels/${discordChannelId}/messages`,
     {
       content,
       embeds: [embed],
