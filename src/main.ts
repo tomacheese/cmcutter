@@ -8,6 +8,7 @@ import {
   getJLSECommand,
   getTSFiles,
   isEncoded,
+  msToTime,
   processFileName,
   sendDiscordMessage,
 } from './lib/utlis'
@@ -39,13 +40,17 @@ const outputDirPath = config.get('outputDirPath') as string
     const jlseCmd = getJLSECommand(file.path, outputDir, filename)
     console.log('JLSE Command: /usr/bin/jlse ', jlseCmd.join(' '))
 
+    const jlseStartTime = performance.now()
     const jlseProcess = spawn('/usr/bin/jlse', jlseCmd)
     console.log('process id:' + process.pid)
     console.log('child process id:' + jlseProcess.pid)
 
     jlseProcess.stdout.on('data', (chunk) => {
       if (chunk.toString().trim().length === 0) return
-      if (chunk.toString().trim().endsWith('%')) {
+      if (
+        chunk.toString().trim().endsWith('%') ||
+        chunk.toString().trim().endsWith('\r')
+      ) {
         process.stdout.write('\r' + chunk.toString().trim())
       } else {
         console.log(chunk.toString().trim())
@@ -53,7 +58,10 @@ const outputDirPath = config.get('outputDirPath') as string
     })
     jlseProcess.stderr.on('data', (chunk) => {
       if (chunk.toString().trim().length === 0) return
-      if (chunk.toString().trim().endsWith('%')) {
+      if (
+        chunk.toString().trim().endsWith('%') ||
+        chunk.toString().trim().endsWith('\r')
+      ) {
         process.stdout.write('\r' + chunk.toString().trim())
       } else {
         console.log(chunk.toString().trim())
@@ -65,6 +73,7 @@ const outputDirPath = config.get('outputDirPath') as string
         resolve()
       })
     })
+    const jlseEndTime = performance.now()
     console.log('exitCode: ', jlseProcess.exitCode)
     if (jlseProcess.exitCode !== 0) {
       console.log('encoding failed')
@@ -79,6 +88,10 @@ const outputDirPath = config.get('outputDirPath') as string
         {
           name: '出力先',
           value: path.join(outputDir, filename),
+        },
+        {
+          name: 'エンコード処理時間',
+          value: msToTime(jlseEndTime - jlseStartTime),
         },
       ],
     })
