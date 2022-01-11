@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { execSync } from 'child_process'
 import config from 'config'
 import fs from 'fs'
 import JSON from 'json5'
@@ -217,4 +218,24 @@ export function msToTime(s: number): string {
     '.' +
     pad(s % 1000, 3)
   )
+}
+
+export async function checkLatest(): Promise<boolean> {
+  const repo = config.has('repo.repo')
+    ? config.get('repo.repo')
+    : 'tomacheese/cmcutter'
+  const branch = config.has('repo.branch')
+    ? config.get('repo.branch')
+    : 'master'
+  const response = await axios.get(
+    `https://api.github.com/repos/${repo}/commits/${branch}`
+  )
+  const latest = response.data.sha
+  const current = execSync('git rev-parse HEAD').toString().trim()
+  if (latest !== current) {
+    console.log(`checkLatest: ${current} is not latest: ${latest}`)
+    return false
+  }
+  console.log(`checkLatest: ${current} is latest`)
+  return true
 }

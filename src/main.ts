@@ -1,10 +1,11 @@
-import { spawn } from 'child_process'
+import { execSync, spawn } from 'child_process'
 import config from 'config'
 import fs from 'fs'
 import path from 'path'
 import { EPGStation } from './lib/epgstation'
 import {
   addEncoded,
+  checkLatest,
   getJLSECommand,
   getTSFiles,
   isEncoded,
@@ -17,6 +18,12 @@ const tsFilesDirPath = config.get('tsFilesDirPath') as string
 const outputDirPath = config.get('outputDirPath') as string
 
 ;(async (): Promise<void> => {
+  if (!(await checkLatest())) {
+    console.log('After a new version was found, update up and restart it.')
+    execSync('git pull')
+    process.exit(0)
+  }
+
   const epg = new EPGStation()
   console.log('Fetch EPGStation Recorded')
   const recordeds = await epg.getRecordeds()
@@ -83,7 +90,7 @@ const outputDirPath = config.get('outputDirPath') as string
 
     await sendDiscordMessage('', {
       title: `CMカット完了`,
-      description: `${file.name} を CMカットしました`,
+      description: `\`${file.name}\` を CMカットしました`,
       fields: [
         {
           name: '出力先',
