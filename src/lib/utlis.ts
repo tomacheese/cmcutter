@@ -78,7 +78,7 @@ export async function processFileName(
     console.log(`${file.name} is anime`)
 
     const recorded = recordeds.find((record) =>
-      record.videoFiles.find((file) => file.filename === file.name)
+      record.videoFiles.find((f) => f.filename === file.name)
     )
     if (!recorded) {
       console.log(`${file.name} is get recorded failed`)
