@@ -74,37 +74,38 @@ export async function processFileName(
   channels: EPGChannel[],
   file: File
 ): Promise<string> {
-  if (file.dirname.startsWith('anime')) {
-    console.log(`${file.name} is anime`)
-
-    const recorded = recordeds.find((record) =>
-      record.videoFiles.find((f) => f.filename === file.name)
-    )
-    if (!recorded) {
-      console.log(`${file.name} is get recorded failed`)
-      return file.name
-    }
-    const channel = channels.find(
-      (channel) => channel.id === recorded.channelId
-    )
-    if (!channel) {
-      console.log(`${file.name} is get channel failed`)
-      return file.name
-    }
-    const syoboi = new Syoboi()
-    const result = await syoboi.requestRSS({
-      start: formatDate(new Date(recorded.startAt), 'yyyyMMddHHmm'),
-      end: formatDate(new Date(recorded.endAt), 'yyyyMMddHHmm'),
-      alt: 'json',
-    })
-    const syoboiItem = result.find((r) => recorded.name.includes(r.Title))
-    if (!syoboiItem) {
-      console.log(`${file.name} is get syoboi item failed`)
-      return file.name
-    }
-    return `${syoboiItem.Title}/${syoboiItem.Title} 第${syoboiItem.Count}話 ${syoboiItem.SubTitle}`
+  const notExtensionFileName = file.name.endsWith('.ts')
+    ? file.name.slice(0, -3)
+    : file.name
+  if (!file.dirname.startsWith('anime')) {
+    return notExtensionFileName
   }
-  return file.name
+  console.log(`${file.name} is anime`)
+
+  const recorded = recordeds.find((record) =>
+    record.videoFiles.find((f) => f.filename === file.name)
+  )
+  if (!recorded) {
+    console.log(`${file.name} is get recorded failed`)
+    return notExtensionFileName
+  }
+  const channel = channels.find((channel) => channel.id === recorded.channelId)
+  if (!channel) {
+    console.log(`${file.name} is get channel failed`)
+    return notExtensionFileName
+  }
+  const syoboi = new Syoboi()
+  const result = await syoboi.requestRSS({
+    start: formatDate(new Date(recorded.startAt), 'yyyyMMddHHmm'),
+    end: formatDate(new Date(recorded.endAt), 'yyyyMMddHHmm'),
+    alt: 'json',
+  })
+  const syoboiItem = result.find((r) => recorded.name.includes(r.Title))
+  if (!syoboiItem) {
+    console.log(`${file.name} is get syoboi item failed`)
+    return notExtensionFileName
+  }
+  return `${syoboiItem.Title}/${syoboiItem.Title} 第${syoboiItem.Count}話 ${syoboiItem.SubTitle}`
 }
 
 export function getJLSECommand(
