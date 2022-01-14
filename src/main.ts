@@ -33,17 +33,22 @@ const outputDirPath = config.get('outputDirPath') as string
   const files = getTSFiles(tsFilesDirPath, '')
 
   for (const file of files) {
-    const outputDir = path.join(outputDirPath, file.dirname)
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true })
-    }
     if (isEncoded(file)) {
       console.log(`${file.name} is encoded`)
       continue
     }
 
-    const filename = await processFileName(recordeds, channels, file)
+    const [dirname, filename] = await processFileName(recordeds, channels, file)
+    console.log(`Dirname: ${dirname}`)
     console.log(`Filename: ${filename}`)
+
+    const outputDir = file.dirname.startsWith('anime')
+      ? path.join(outputDirPath, 'anime', dirname)
+      : path.join(outputDirPath, file.dirname)
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true })
+    }
+
     const jlseCmd = getJLSECommand(file.path, outputDir, filename)
     console.log('JLSE Command: /usr/bin/jlse ', jlseCmd.join(' '))
 
@@ -94,7 +99,7 @@ const outputDirPath = config.get('outputDirPath') as string
       fields: [
         {
           name: '出力先',
-          value: path.join(outputDir, filename),
+          value: path.join(outputDir, filename) + '.mp4',
         },
         {
           name: 'エンコード処理時間',
