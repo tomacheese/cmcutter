@@ -1,0 +1,14 @@
+[Unit]
+Description=cmcutter
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=%WorkingDirectory%
+ExecStart=yarn build
+Restart=no
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target

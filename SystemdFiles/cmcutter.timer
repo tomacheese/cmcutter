@@ -1,0 +1,9 @@
+[Unit]
+Description=cmcutter
+
+[Timer]
+Unit=cmcutter.service
+OnCalendar=*-*-* 03,15:00:00
+
+[Install]
+WantedBy=timers.target
