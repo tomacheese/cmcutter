@@ -21,7 +21,7 @@ const outputDirPath = config.get('outputDirPath') as string
   if (!(await checkLatest())) {
     console.log('After a new version was found, update up and restart it.')
     execSync('git pull')
-    process.exit(0)
+    process.exit(1)
   }
 
   const epg = new EPGStation()
