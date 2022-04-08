@@ -69,6 +69,24 @@ export function addEncoded(file: File): void {
   fs.writeFileSync(encodedDataFile, JSON.stringify(data, null, 2))
 }
 
+// https://github.com/l3tnun/EPGStation/blob/6dbcb58d6ab13b99b1489b5b0f60788f8b802599/src/util/StrUtil.ts#L64
+export function toHalf(str: string): string {
+  const tmp = str.replace(/[！-～]/g, (s) => {
+    return String.fromCharCode(s.charCodeAt(0) - 0xfee0)
+  })
+
+  return (
+    tmp
+      .replace(/”/g, '"')
+      .replace(/’/g, "'")
+      .replace(/‘/g, '`')
+      .replace(/￥/g, '\\')
+      // eslint-disable-next-line no-irregular-whitespace
+      .replace(/　/g, ' ')
+      .replace(/〜/g, '~')
+  )
+}
+
 export async function processFileName(
   recordeds: EPGRecorded[],
   channels: EPGChannel[],
@@ -81,18 +99,19 @@ export async function processFileName(
     return ['', notExtensionFileName]
   }
   console.log(`${file.name} is anime`)
+  const originalDirname = file.dirname.replace('anime/', '')
 
   const recorded = recordeds.find((record) =>
     record.videoFiles.find((f) => f.filename === file.name)
   )
   if (!recorded) {
     console.log(`${file.name} is get recorded failed`)
-    return ['', notExtensionFileName]
+    return [originalDirname, notExtensionFileName]
   }
   const channel = channels.find((channel) => channel.id === recorded.channelId)
   if (!channel) {
     console.log(`${file.name} is get channel failed`)
-    return ['', notExtensionFileName]
+    return [originalDirname, notExtensionFileName]
   }
   const syoboi = new Syoboi()
   const result = await syoboi.requestRSS({
@@ -100,10 +119,14 @@ export async function processFileName(
     end: formatDate(new Date(recorded.endAt), 'yyyyMMddHHmm'),
     alt: 'json',
   })
-  const syoboiItem = result.find((r) => recorded.name.includes(r.Title))
+  const syoboiItem = result.find(
+    (r) =>
+      toHalf(recorded.name).includes(toHalf(r.Title)) ||
+      toHalf(r.Title).includes(toHalf(recorded.name))
+  )
   if (!syoboiItem) {
     console.log(`${file.name} is get syoboi item failed`)
-    return ['', notExtensionFileName]
+    return [originalDirname, notExtensionFileName]
   }
   return [
     `${syoboiItem.Title}`,
