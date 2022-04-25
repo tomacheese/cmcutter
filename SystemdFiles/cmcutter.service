@@ -7,7 +7,7 @@ User=root
 Group=root
 WorkingDirectory=%WorkingDirectory%
 ExecStart=yarn build
-Restart=no
+Restart=on-failure
 Type=oneshot
 
 [Install]
