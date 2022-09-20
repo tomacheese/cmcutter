@@ -37,7 +37,7 @@ export function getTSFiles(dirPath: string, subPath: string): File[] {
       files.push({
         name: filename,
         dirname: subPath,
-        path: path,
+        path,
       })
     }
     if (stat.isDirectory()) {
