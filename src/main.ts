@@ -6,6 +6,7 @@ import { EPGStation } from './lib/epgstation'
 import {
   addEncoded,
   checkLatest,
+  formatBytes,
   getJLSECommand,
   getTSFiles,
   isEncoded,
@@ -100,6 +101,12 @@ const outputDirPath = config.get('outputDirPath') as string
         {
           name: '出力先',
           value: path.join(outputDir, filename) + '.mp4',
+        },
+        {
+          name: 'ファイルサイズ',
+          value: `${formatBytes(
+            fs.statSync(path.join(outputDir, filename) + '.mp4').size
+          )}`,
         },
         {
           name: 'エンコード処理時間',
