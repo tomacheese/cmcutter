@@ -42,6 +42,10 @@ const outputDirPath = config.get('outputDirPath') as string
     const [dirname, filename] = await processFileName(recordeds, channels, file)
     console.log(`Dirname: ${dirname}`)
     console.log(`Filename: ${filename}`)
+    if (dirname === null || filename === null) {
+      console.log(`${file.name}: dirname or filename is null. Skip`)
+      continue
+    }
 
     const outputDir = file.dirname.startsWith('anime')
       ? path.join(outputDirPath, 'anime', dirname)

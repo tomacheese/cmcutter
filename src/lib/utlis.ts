@@ -90,7 +90,7 @@ export async function processFileName(
   recordeds: EPGRecorded[],
   channels: EPGChannel[],
   file: File
-): Promise<string[]> {
+): Promise<(string | null)[]> {
   const notExtensionFileName = file.name.endsWith('.ts')
     ? file.name.slice(0, -3)
     : file.name
@@ -126,6 +126,15 @@ export async function processFileName(
   if (!syoboiItem) {
     console.log(`${file.name} is get syoboi item failed`)
     return [originalDirname, notExtensionFileName]
+  }
+  // 3日以内の番組の場合、話数やサブタイトルがNULLだったらスキップするためにファイルタイトルにNULLを返す
+  if (
+    (syoboiItem.SubTitle === null ||
+    syoboiItem.Count === null) &&
+    new Date(recorded.endAt).getTime() - new Date().getTime() < 1000 * 60 * 60 * 24 * 3
+  ) {
+    console.log(`${file.name} is get syoboi item failed (SubTitle or Count is null)`)
+    return [originalDirname, null]
   }
   return [
     `${syoboiItem.Title}`,
