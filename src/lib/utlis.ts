@@ -129,11 +129,13 @@ export async function processFileName(
   }
   // 3日以内の番組の場合、話数やサブタイトルがNULLだったらスキップするためにファイルタイトルにNULLを返す
   if (
-    (syoboiItem.SubTitle === null ||
-    syoboiItem.Count === null) &&
-    new Date(recorded.endAt).getTime() - new Date().getTime() < 1000 * 60 * 60 * 24 * 3
+    (syoboiItem.SubTitle === null || syoboiItem.Count === null) &&
+    new Date(recorded.endAt).getTime() - new Date().getTime() <
+      1000 * 60 * 60 * 24 * 3
   ) {
-    console.log(`${file.name} is get syoboi item failed (SubTitle or Count is null)`)
+    console.log(
+      `${file.name} is get syoboi item failed (SubTitle or Count is null)`
+    )
     return [originalDirname, null]
   }
   return [
