@@ -48,7 +48,7 @@ export interface EPGChannel {
 export class EPGStation {
   public async getRecordeds(): Promise<EPGRecorded[]> {
     const response = await axios.get(
-      'http://localhost:8888/api/recorded?isHalfWidth=false'
+      'http://localhost:8888/api/recorded?isHalfWidth=false&limit=300'
     )
     return response.data.records
   }
