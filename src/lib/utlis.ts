@@ -146,7 +146,7 @@ export async function processFileName(
   if (
     (syoboiItem.SubTitle === null || syoboiItem.Count === null) &&
     new Date(recorded.endAt).getTime() - new Date().getTime() <
-    1000 * 60 * 60 * 24 * 3
+      1000 * 60 * 60 * 24 * 3
   ) {
     console.log(
       `${file.name} is get syoboi item failed (SubTitle or Count is null)`
