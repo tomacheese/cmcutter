@@ -27,7 +27,12 @@ const outputDirPath = config.get('outputDirPath') as string
 
   const epg = new EPGStation()
   console.log('Fetch EPGStation Recorded')
-  const recordeds = await epg.getRecordeds()
+  const rawRecordeds = await epg.getRecordeds()
+  console.log('Fetch EPGStation Recording')
+  const recordings = await epg.getRecordings()
+
+  const recordeds = [...rawRecordeds, ...recordings]
+
   console.log('Fetch EPGStation Channels')
   const channels = await epg.getChannels()
 
@@ -39,7 +44,12 @@ const outputDirPath = config.get('outputDirPath') as string
       continue
     }
 
-    const [dirname, filename] = await processFileName(recordeds, channels, file)
+    const result = await processFileName(recordeds, channels, file)
+    if (result === null) {
+      console.log(`${file.name} is get recorded failed`)
+      continue
+    }
+    const { dirname, filename } = result
     console.log(`Dirname: ${dirname}`)
     console.log(`Filename: ${filename}`)
     if (dirname === null || filename === null) {

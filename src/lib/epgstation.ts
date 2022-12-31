@@ -53,6 +53,13 @@ export class EPGStation {
     return response.data.records
   }
 
+  public async getRecordings(): Promise<EPGRecorded[]> {
+    const response = await axios.get(
+      'http://localhost:8888/api/recording?&isHalfWidth=true&limit=300'
+    )
+    return response.data.records
+  }
+
   public async getChannels(): Promise<EPGChannel[]> {
     const response = await axios.get('http://localhost:8888/api/channels')
     return response.data
