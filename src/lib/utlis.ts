@@ -90,28 +90,40 @@ export async function processFileName(
   recordeds: EPGRecorded[],
   channels: EPGChannel[],
   file: File
-): Promise<(string | null)[]> {
+): Promise<{
+  dirname: string
+  filename: string | null
+} | null> {
   const notExtensionFileName = file.name.endsWith('.ts')
     ? file.name.slice(0, -3)
     : file.name
-  if (!file.dirname.startsWith('anime')) {
-    return ['', notExtensionFileName]
-  }
-  console.log(`${file.name} is anime`)
-  const originalDirname = file.dirname.replace('anime/', '')
 
   const recorded = recordeds.find((record) =>
     record.videoFiles.find((f) => f.filename === file.name)
   )
   if (!recorded) {
     console.log(`${file.name} is get recorded failed`)
-    return [originalDirname, notExtensionFileName]
+    return null
+  }
+  if (recorded.isEncoding || recorded.isRecording) {
+    console.log(`${file.name} is encoding or recording`)
+    return null
   }
   const channel = channels.find((channel) => channel.id === recorded.channelId)
   if (!channel) {
     console.log(`${file.name} is get channel failed`)
-    return [originalDirname, notExtensionFileName]
+    return null
   }
+
+  if (!file.dirname.startsWith('anime')) {
+    return {
+      dirname: '',
+      filename: notExtensionFileName,
+    }
+  }
+  console.log(`${file.name} is anime`)
+  const originalDirname = file.dirname.replace('anime/', '')
+
   const syoboi = new Syoboi()
   const result = await syoboi.requestRSS({
     start: formatDate(new Date(recorded.startAt), 'yyyyMMddHHmm'),
@@ -125,7 +137,10 @@ export async function processFileName(
   )
   if (!syoboiItem) {
     console.log(`${file.name} is get syoboi item failed`)
-    return [originalDirname, notExtensionFileName]
+    return {
+      dirname: originalDirname,
+      filename: notExtensionFileName,
+    }
   }
   // 3日以内の番組の場合、話数やサブタイトルがNULLだったらスキップするためにファイルタイトルにNULLを返す
   if (
@@ -136,12 +151,15 @@ export async function processFileName(
     console.log(
       `${file.name} is get syoboi item failed (SubTitle or Count is null)`
     )
-    return [originalDirname, null]
+    return {
+      dirname: originalDirname,
+      filename: null,
+    }
   }
-  return [
-    `${syoboiItem.Title}`,
-    `${syoboiItem.Title} 第${syoboiItem.Count}話 ${syoboiItem.SubTitle}`,
-  ]
+  return {
+    dirname: `${syoboiItem.Title}`,
+    filename: `${syoboiItem.Title} 第${syoboiItem.Count}話 ${syoboiItem.SubTitle}`,
+  }
 }
 
 export function getJLSECommand(
