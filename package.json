@@ -25,7 +25,7 @@
     "@typescript-eslint/eslint-plugin": "5.48.2",
     "@typescript-eslint/parser": "5.48.2",
     "axios": "1.2.3",
-    "config": "3.3.8",
+    "config": "3.3.9",
     "eslint": "8.32.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-config-standard": "17.0.0",
