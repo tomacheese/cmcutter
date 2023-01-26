@@ -1,4 +1,4 @@
-# Node.js v16 でビルド・テストを実行する
+# Node.js でビルド・テストを実行する。バージョンは .node-version に記載されているものを利用する
 
 name: Node CI
 
@@ -13,32 +13,30 @@ on:
       - master
 
 jobs:
-  ci:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node: [16]
+  node-ci:
+    runs-on: ubuntu-latest
 
     steps:
       - name: 🛎 Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: 🏗 Setup node env
+      - name: 🏗 Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version-file: .node-version
+          cache: yarn
 
       - name: 📃 Check package.json definition
         id: package-json
         run: |
-          compile=$(cat package.json | jq '.scripts | has("compile")')
-          build=$(cat package.json | jq '.scripts | has("build")')
-          generate=$(cat package.json | jq '.scripts | has("generate")')
-          package=$(cat package.json | jq '.scripts | has("package")')
-          lint=$(cat package.json | jq '.scripts | has("lint")')
-          test=$(cat package.json | jq '.scripts | has("test")')
+          compile=$(jq '.scripts | has("compile")' package.json)
+          build=$(jq '.scripts | has("build")' package.json)
+          generate=$(jq '.scripts | has("generate")' package.json)
+          package=$(jq '.scripts | has("package")' package.json)
+          lint=$(jq '.scripts | has("lint")' package.json)
+          test=$(jq '.scripts | has("test")' package.json)
 
           echo "compile: $compile"
           echo "build: $build"
@@ -54,21 +52,8 @@ jobs:
           echo "lint=$lint" >> $GITHUB_OUTPUT
           echo "test=$test" >> $GITHUB_OUTPUT
 
-      - name: 🛠 Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-      - name: 📦 Cache node_modules
-        uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
       - name: 👨🏻‍💻 Install dependencies
-        run: yarn
+        run: yarn install --frozen-lockfile
 
       - name: 👀 Run linter
         if: steps.package-json.outputs.lint == 'true'
@@ -100,9 +85,21 @@ jobs:
         run: |
           echo "exists=$(test -d dist && echo true || echo false)" >> $GITHUB_OUTPUT
 
-      - name: 📦 Upload artifact
+      - name: 📦 Upload dist artifact
         if: steps.check-dist.outputs.exists == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist
+
+      - name: Check exists output directory
+        id: check-output
+        run: |
+          echo "exists=$(test -d output && echo true || echo false)" >> $GITHUB_OUTPUT
+
+      - name: 📦 Upload output artifact
+        if: steps.check-output.outputs.exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: output
+          path: output
