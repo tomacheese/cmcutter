@@ -4,6 +4,7 @@ import config from 'config'
 import fs from 'fs'
 import path from 'path'
 import { EPGChannel, EPGRecorded } from './epgstation'
+import { Logger } from './logger'
 import { Syoboi } from './syoboi'
 
 const encodedDataFile = config.get('encodedDataFile') as string
@@ -94,6 +95,7 @@ export async function processFileName(
   dirname: string
   filename: string | null
 } | null> {
+  const logger = Logger.configure('Utils.processFileName')
   const notExtensionFileName = file.name.endsWith('.ts')
     ? file.name.slice(0, -3)
     : file.name
@@ -102,16 +104,16 @@ export async function processFileName(
     record.videoFiles.find((f) => f.filename === file.name)
   )
   if (!recorded) {
-    console.log(`${file.name} is get recorded failed`)
+    logger.error(`❗ ${file.name} is get recorded failed`)
     return null
   }
   if (recorded.isEncoding || recorded.isRecording) {
-    console.log(`${file.name} is encoding or recording`)
+    logger.info(`❗ ${file.name} is encoding or recording`)
     return null
   }
   const channel = channels.find((channel) => channel.id === recorded.channelId)
   if (!channel) {
-    console.log(`${file.name} is get channel failed`)
+    logger.error(`❗ ${file.name} is get channel failed`)
     return null
   }
 
@@ -121,7 +123,7 @@ export async function processFileName(
       filename: notExtensionFileName,
     }
   }
-  console.log(`${file.name} is anime`)
+  logger.info(`🎥 ${file.name} is anime`)
   const originalDirname = file.dirname.replace('anime/', '')
 
   const syoboi = new Syoboi()
@@ -136,7 +138,7 @@ export async function processFileName(
       toHalf(r.Title).includes(toHalf(recorded.name))
   )
   if (!syoboiItem) {
-    console.log(`${file.name} is get syoboi item failed`)
+    logger.error(`❗ ${file.name} is get syoboi item failed`)
     return {
       dirname: originalDirname,
       filename: notExtensionFileName,
@@ -148,8 +150,8 @@ export async function processFileName(
     new Date(recorded.endAt).getTime() - new Date().getTime() <
       1000 * 60 * 60 * 24 * 3
   ) {
-    console.log(
-      `${file.name} is get syoboi item failed (SubTitle or Count is null)`
+    logger.error(
+      `❗ ${file.name} is get syoboi item failed (SubTitle or Count is null)`
     )
     return {
       dirname: originalDirname,
@@ -245,6 +247,7 @@ export async function sendDiscordMessage(
   content: string,
   embed: DiscordMessageEmbed
 ): Promise<void> {
+  const logger = Logger.configure('Utils.sendDiscordMessage')
   const discordChannelId = config.get('discordChannelId')
   const discordToken = config.get('discordToken')
   const response = await axios.post(
@@ -260,7 +263,7 @@ export async function sendDiscordMessage(
       },
     }
   )
-  console.log('sendDiscordMessage: ', response.status)
+  logger.info(`📧 sendDiscordMessage: ${response.status}`)
 }
 export function msToTime(s: number): string {
   const pad = (n: string | number, z = 2): string => ('00' + n).slice(-z)
@@ -276,6 +279,7 @@ export function msToTime(s: number): string {
 }
 
 export async function checkLatest(): Promise<boolean> {
+  const logger = Logger.configure('Utils.checkLatest')
   const repo = config.has('repo.repo')
     ? config.get('repo.repo')
     : 'tomacheese/cmcutter'
@@ -288,10 +292,10 @@ export async function checkLatest(): Promise<boolean> {
   const latest = response.data.sha
   const current = execSync('git rev-parse HEAD').toString().trim()
   if (latest !== current) {
-    console.log(`checkLatest: ${current} is not latest: ${latest}`)
+    logger.error(`❗ checkLatest: ${current} is not latest: ${latest}`)
     return false
   }
-  console.log(`checkLatest: ${current} is latest`)
+  logger.info(`✅ checkLatest: ${current} is latest`)
   return true
 }
 
