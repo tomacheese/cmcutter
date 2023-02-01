@@ -3,6 +3,7 @@ import config from 'config'
 import fs from 'fs'
 import path from 'path'
 import { EPGStation } from './lib/epgstation'
+import { Logger } from './lib/logger'
 import {
   addEncoded,
   checkLatest,
@@ -18,42 +19,43 @@ import {
 const tsFilesDirPath = config.get('tsFilesDirPath') as string
 const outputDirPath = config.get('outputDirPath') as string
 
-;(async (): Promise<void> => {
+async function main(): Promise<void> {
+  const logger = Logger.configure('main')
   if (!(await checkLatest())) {
-    console.log('After a new version was found, update up and restart it.')
+    logger.info('🆕 New version was found. Please update and restart it.')
     execSync('git pull')
     process.exit(1)
   }
 
   const epg = new EPGStation()
-  console.log('Fetch EPGStation Recorded')
+  logger.info('📡 Fetch EPGStation Recorded')
   const rawRecordeds = await epg.getRecordeds()
-  console.log('Fetch EPGStation Recording')
+  logger.info('📡 Fetch EPGStation Recording')
   const recordings = await epg.getRecordings()
 
   const recordeds = [...rawRecordeds, ...recordings]
 
-  console.log('Fetch EPGStation Channels')
+  logger.info('📡 Fetch EPGStation Channels')
   const channels = await epg.getChannels()
 
   const files = getTSFiles(tsFilesDirPath, '')
 
   for (const file of files) {
     if (isEncoded(file)) {
-      console.log(`${file.name} is encoded`)
+      logger.info(`✅ ${file.name} is encoded`)
       continue
     }
 
     const result = await processFileName(recordeds, channels, file)
     if (result === null) {
-      console.log(`${file.name} is get recorded failed`)
+      logger.warn(`❌ ${file.name} is get recorded failed`)
       continue
     }
     const { dirname, filename } = result
-    console.log(`Dirname: ${dirname}`)
-    console.log(`Filename: ${filename}`)
+    logger.info(`📁 Dirname: ${dirname}`)
+    logger.info(`📄 Filename: ${filename}`)
     if (dirname === null || filename === null) {
-      console.log(`${file.name}: dirname or filename is null. Skip`)
+      logger.warn(`❌ ${file.name}: dirname or filename is null. Skip`)
       continue
     }
 
@@ -65,12 +67,12 @@ const outputDirPath = config.get('outputDirPath') as string
     }
 
     const jlseCmd = getJLSECommand(file.path, outputDir, filename)
-    console.log('JLSE Command: /usr/bin/jlse ', jlseCmd.join(' '))
+    logger.info(`🚀 JLSE Command: /usr/bin/jlse ${jlseCmd.join(' ')}`)
 
     const jlseStartTime = performance.now()
     const jlseProcess = spawn('/usr/bin/jlse', jlseCmd)
-    console.log('process id:' + process.pid)
-    console.log('child process id:' + jlseProcess.pid)
+    logger.info(`🔢 Process ID: ${process.pid}`)
+    logger.info(`🔢 Child Process ID: ${jlseProcess.pid}`)
 
     jlseProcess.stdout.on('data', (chunk) => {
       if (chunk.toString().trim().length === 0) return
@@ -80,7 +82,7 @@ const outputDirPath = config.get('outputDirPath') as string
       ) {
         process.stdout.write('\r' + chunk.toString().trim())
       } else {
-        console.log(chunk.toString().trim())
+        logger.info(chunk.toString().trim())
       }
     })
     jlseProcess.stderr.on('data', (chunk) => {
@@ -91,7 +93,7 @@ const outputDirPath = config.get('outputDirPath') as string
       ) {
         process.stdout.write('\r' + chunk.toString().trim())
       } else {
-        console.log(chunk.toString().trim())
+        logger.error(chunk.toString().trim())
       }
     })
 
@@ -101,9 +103,9 @@ const outputDirPath = config.get('outputDirPath') as string
       })
     })
     const jlseEndTime = performance.now()
-    console.log('exitCode: ', jlseProcess.exitCode)
+    logger.info(`🔢 Exit Code: ${jlseProcess.exitCode}`)
     if (jlseProcess.exitCode !== 0) {
-      console.log('encoding failed')
+      logger.error(`❌ ${file.name} is encoding failed`)
       continue
     }
     addEncoded(file)
@@ -129,4 +131,8 @@ const outputDirPath = config.get('outputDirPath') as string
       ],
     })
   }
+}
+
+;(async (): Promise<void> => {
+  await main()
 })()
