@@ -3,7 +3,7 @@ import config from 'config'
 import fs from 'fs'
 import path from 'path'
 import { EPGStation } from './lib/epgstation'
-import { Logger } from './lib/logger'
+import { Logger } from '@book000/node-utils'
 import {
   addEncoded,
   checkLatest,
