@@ -4,7 +4,7 @@ import config from 'config'
 import fs from 'fs'
 import path from 'path'
 import { EPGChannel, EPGRecorded } from './epgstation'
-import { Logger } from './logger'
+import { Logger } from '@book000/node-utils'
 import { Syoboi } from './syoboi'
 
 const encodedDataFile = config.get('encodedDataFile') as string
