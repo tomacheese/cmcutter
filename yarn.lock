@@ -168,10 +168,10 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.2.tgz#423c77877d0569db20e1fc80885ac4118314010e"
   integrity sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==
 
-"@types/config@3.3.2":
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/@types/config/-/config-3.3.2.tgz#e84f6c22d409a155d88708388b1a4e8929d9764d"
-  integrity sha512-NAxsgr73BakGnfpHq5eKmtba/x+JyPcZmSa0DzCTdR4JCxeSC+KpwSQuOMGvACs7axkjGqi44/zYRkhiX7aDew==
+"@types/config@3.3.3":
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/@types/config/-/config-3.3.3.tgz#3e9e286365bd02f8ca079898a14172df47010941"
+  integrity sha512-BB8DBAud88EgiAKlz8WQStzI771Kb6F3j4dioRJ4GD+tP4tzcZyMlz86aXuZT4s9hyesFORehMQE6eqtA5O+Vg==
 
 "@types/json-schema@^7.0.12":
   version "7.0.12"
