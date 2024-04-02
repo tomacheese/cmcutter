@@ -22,7 +22,7 @@
   "devDependencies": {
     "@book000/node-utils": "1.12.108",
     "@types/config": "3.3.4",
-    "@types/node": "20.12.2",
+    "@types/node": "20.12.3",
     "@typescript-eslint/eslint-plugin": "7.5.0",
     "@typescript-eslint/parser": "7.5.0",
     "axios": "1.6.8",
