@@ -183,7 +183,7 @@ export function getJLSECommand(
     `-n`,
     outputFileName,
     '-o',
-    '" -c:v h264_v4l2m2m -vf yadif=0:-1:1,scale=-1:720 -preset veryfast -acodec aac -b:v 4M -aspect 16:9 -r 24000/1001 -ab 256K"',
+    '" -c:v h264_v4l2m2m -vf yadif=0:-1:1 -preset veryfast -acodec aac -b:v 4M -aspect 16:9 -r 24000/1001 -ab 256K"',
   ]
 }
 
