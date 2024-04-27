@@ -1,7 +1,7 @@
-import { execSync, spawn } from 'child_process'
+import { execSync, spawn } from 'node:child_process'
 import config from 'config'
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import { EPGStation } from './lib/epgstation'
 import { Logger } from '@book000/node-utils'
 import {
@@ -16,8 +16,8 @@ import {
   sendDiscordMessage,
 } from './lib/utlis'
 
-const tsFilesDirPath = config.get('tsFilesDirPath') as string
-const outputDirPath = config.get('outputDirPath') as string
+const tsFilesDirPath = config.get('tsFilesDirPath')
+const outputDirPath = config.get('outputDirPath')
 
 async function main(): Promise<void> {
   const logger = Logger.configure('main')
@@ -120,9 +120,9 @@ async function main(): Promise<void> {
         },
         {
           name: 'ファイルサイズ',
-          value: `${formatBytes(
+          value: formatBytes(
             fs.statSync(path.join(outputDir, filename) + '.mp4').size
-          )}`,
+          ),
         },
         {
           name: 'エンコード処理時間',

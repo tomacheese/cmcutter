@@ -27,13 +27,13 @@ interface SyoboiRssResult {
   StTime: string
   EdTime: string
   LastUpdate: string
-  Count: string
+  Count: string | null
   StOffset: string
   TID: string
   PID: string
   ProgComment: string
   ChID: string
-  SubTitle: string
+  SubTitle: string | null
   Flag: string
   Deleted: string
   Warn: string
@@ -71,18 +71,22 @@ interface SyoboiJsonResult {
 
 export class Syoboi {
   public async requestJSON(
-    options: SyoboiJsonOptions
+    options: SyoboiJsonOptions,
   ): Promise<SyoboiJsonResult> {
-    const response = await axios.get('https://cal.syoboi.jp/json.php', {
+    const response = await axios.get<{
+      Titles: Record<string, SyoboiJsonResult>
+    }>('https://cal.syoboi.jp/json.php', {
       params: options,
     })
     return response.data.Titles[options.TID]
   }
 
   public async requestRSS(
-    options: SyoboiRssOptions
+    options: SyoboiRssOptions,
   ): Promise<SyoboiRssResult[]> {
-    const response = await axios.get('https://cal.syoboi.jp/rss2.php', {
+    const response = await axios.get<{
+      items: SyoboiRssResult[]
+    }>('https://cal.syoboi.jp/rss2.php', {
       params: options,
     })
 

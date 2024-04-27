@@ -1,22 +1,34 @@
 import axios from 'axios'
-import { execSync } from 'child_process'
+import { execSync } from 'node:child_process'
 import config from 'config'
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import { EPGChannel, EPGRecorded } from './epgstation'
 import { Logger } from '@book000/node-utils'
 import { Syoboi } from './syoboi'
 
-const encodedDataFile = config.get('encodedDataFile') as string
+const encodedDataFile = config.get<string>('encodedDataFile')
 
 export function formatDate(date: Date, format: string): string {
-  format = format.replace(/yyyy/g, String(date.getFullYear()))
-  format = format.replace(/MM/g, ('0' + (date.getMonth() + 1)).slice(-2))
-  format = format.replace(/dd/g, ('0' + date.getDate()).slice(-2))
-  format = format.replace(/HH/g, ('0' + date.getHours()).slice(-2))
-  format = format.replace(/mm/g, ('0' + date.getMinutes()).slice(-2))
-  format = format.replace(/ss/g, ('0' + date.getSeconds()).slice(-2))
-  format = format.replace(/SSS/g, ('00' + date.getMilliseconds()).slice(-3))
+  format = format.replaceAll('yyyy', String(date.getFullYear()))
+  format = format.replaceAll(
+    'MM',
+    ('0' + (date.getMonth() + 1).toString()).slice(-2),
+  )
+  format = format.replaceAll('dd', ('0' + date.getDate().toString()).slice(-2))
+  format = format.replaceAll('HH', ('0' + date.getHours().toString()).slice(-2))
+  format = format.replaceAll(
+    'mm',
+    ('0' + date.getMinutes().toString()).slice(-2),
+  )
+  format = format.replaceAll(
+    'ss',
+    ('0' + date.getSeconds().toString()).slice(-2),
+  )
+  format = format.replaceAll(
+    'SSS',
+    ('00' + date.getMilliseconds().toString()).slice(-3),
+  )
   return format
 }
 
@@ -30,7 +42,7 @@ export function getTSFiles(dirPath: string, subPath: string): File[] {
   const searchPath = path.join(dirPath, subPath)
   const files: File[] = []
   const dirs = fs.readdirSync(searchPath)
-  dirs.forEach((filename: any) => {
+  for (const filename of dirs) {
     const path = `${searchPath}/${filename}`
     const stat = fs.statSync(path)
     if (stat.isFile() && path.endsWith('.ts')) {
@@ -44,11 +56,11 @@ export function getTSFiles(dirPath: string, subPath: string): File[] {
       files.push(
         ...getTSFiles(
           dirPath,
-          `${subPath !== '' ? subPath + '/' : ''}${filename}`
-        )
+          `${subPath === '' ? '' : subPath + '/'}${filename}`,
+        ),
       )
     }
-  })
+  }
   return files
 }
 
@@ -56,7 +68,7 @@ export function isEncoded(file: File): boolean {
   if (!fs.existsSync(encodedDataFile)) {
     return false
   }
-  const data = JSON.parse(fs.readFileSync(encodedDataFile, 'utf8'))
+  const data: string[] = JSON.parse(fs.readFileSync(encodedDataFile, 'utf8'))
   return data.includes(file.dirname + '/' + file.name)
 }
 
@@ -64,33 +76,35 @@ export function addEncoded(file: File): void {
   if (!fs.existsSync(encodedDataFile)) {
     fs.writeFileSync(encodedDataFile, '[]')
   }
-  const data = JSON.parse(fs.readFileSync(encodedDataFile, 'utf8'))
+  const data: string[] = JSON.parse(fs.readFileSync(encodedDataFile, 'utf8'))
   data.push(file.dirname + '/' + file.name)
   fs.writeFileSync(encodedDataFile, JSON.stringify(data, null, 2))
 }
 
 // https://github.com/l3tnun/EPGStation/blob/6dbcb58d6ab13b99b1489b5b0f60788f8b802599/src/util/StrUtil.ts#L64
 export function toHalf(str: string): string {
-  const tmp = str.replace(/[！-～]/g, (s) => {
-    return String.fromCharCode(s.charCodeAt(0) - 0xfee0)
+  const tmp = str.replaceAll(/[！-～]/g, (s) => {
+    const c = s.codePointAt(0)
+    if (!c) {
+      return ''
+    }
+    return String.fromCodePoint(c - 0xfe_e0)
   })
 
-  return (
-    tmp
-      .replace(/”/g, '"')
-      .replace(/’/g, "'")
-      .replace(/‘/g, '`')
-      .replace(/￥/g, '\\')
-      // eslint-disable-next-line no-irregular-whitespace
-      .replace(/　/g, ' ')
-      .replace(/〜/g, '~')
-  )
+  return tmp
+    .replaceAll('”', '"')
+    .replaceAll('’', "'")
+    .replaceAll('‘', '`')
+    .replaceAll('￥', '\\')
+
+    .replaceAll('\u3000', ' ')
+    .replaceAll('〜', '~')
 }
 
 export async function processFileName(
   recordeds: EPGRecorded[],
   channels: EPGChannel[],
-  file: File
+  file: File,
 ): Promise<{
   dirname: string
   filename: string | null
@@ -101,7 +115,7 @@ export async function processFileName(
     : file.name
 
   const recorded = recordeds.find((record) =>
-    record.videoFiles.find((f) => f.filename === file.name)
+    record.videoFiles.find((f) => f.filename === file.name),
   )
   if (!recorded) {
     logger.error(`❗ ${file.name} is get recorded failed`)
@@ -135,7 +149,7 @@ export async function processFileName(
   const syoboiItem = result.find(
     (r) =>
       toHalf(recorded.name).includes(toHalf(r.Title)) ||
-      toHalf(r.Title).includes(toHalf(recorded.name))
+      toHalf(r.Title).includes(toHalf(recorded.name)),
   )
   if (!syoboiItem) {
     logger.error(`❗ ${file.name} is get syoboi item failed`)
@@ -147,11 +161,10 @@ export async function processFileName(
   // 3日以内の番組の場合、話数やサブタイトルがNULLだったらスキップするためにファイルタイトルにNULLを返す
   if (
     (syoboiItem.SubTitle === null || syoboiItem.Count === null) &&
-    new Date(recorded.endAt).getTime() - new Date().getTime() <
-      1000 * 60 * 60 * 24 * 3
+    new Date(recorded.endAt).getTime() - Date.now() < 1000 * 60 * 60 * 24 * 3
   ) {
     logger.error(
-      `❗ ${file.name} is get syoboi item failed (SubTitle or Count is null)`
+      `❗ ${file.name} is get syoboi item failed (SubTitle or Count is null)`,
     )
     return {
       dirname: originalDirname,
@@ -159,7 +172,7 @@ export async function processFileName(
     }
   }
   return {
-    dirname: `${syoboiItem.Title}`,
+    dirname: syoboiItem.Title,
     filename: `${syoboiItem.Title} 第${syoboiItem.Count}話 ${syoboiItem.SubTitle}`,
   }
 }
@@ -167,7 +180,7 @@ export async function processFileName(
 export function getJLSECommand(
   inputPath: string,
   outputDir: string,
-  outputFileName: string
+  outputFileName: string,
 ): string[] {
   if (!inputPath.endsWith('.ts')) {
     throw new Error('inputPath is not ts')
@@ -245,11 +258,11 @@ interface DiscordMessageEmbed {
 
 export async function sendDiscordMessage(
   content: string,
-  embed: DiscordMessageEmbed
+  embed: DiscordMessageEmbed,
 ): Promise<void> {
   const logger = Logger.configure('Utils.sendDiscordMessage')
-  const discordChannelId = config.get('discordChannelId')
-  const discordToken = config.get('discordToken')
+  const discordChannelId = config.get<string>('discordChannelId')
+  const discordToken = config.get<string>('discordToken')
   const response = await axios.post(
     `https://discord.com/api/channels/${discordChannelId}/messages`,
     {
@@ -261,18 +274,22 @@ export async function sendDiscordMessage(
         'Content-Type': 'application/json',
         Authorization: `Bot ${discordToken}`,
       },
-    }
+    },
   )
   logger.info(`📧 sendDiscordMessage: ${response.status}`)
 }
+
+export function pad(num: number, size = 2): string {
+  return ('00' + num.toString()).slice(-size)
+}
+
 export function msToTime(s: number): string {
-  const pad = (n: string | number, z = 2): string => ('00' + n).slice(-z)
   return (
-    pad((s / 3.6e6) | 0) +
+    pad(Math.trunc(s / 3.6e6)) +
     ':' +
-    pad(((s % 3.6e6) / 6e4) | 0) +
+    pad(Math.trunc((s % 3.6e6) / 6e4)) +
     ':' +
-    pad(((s % 6e4) / 1000) | 0) +
+    pad(Math.trunc((s % 6e4) / 1000)) +
     '.' +
     pad(s % 1000, 3)
   )
@@ -281,14 +298,14 @@ export function msToTime(s: number): string {
 export async function checkLatest(): Promise<boolean> {
   const logger = Logger.configure('Utils.checkLatest')
   const repo = config.has('repo.repo')
-    ? config.get('repo.repo')
+    ? config.get<string>('repo.repo')
     : 'tomacheese/cmcutter'
   const branch = config.has('repo.branch')
-    ? config.get('repo.branch')
+    ? config.get<string>('repo.branch')
     : 'master'
-  const response = await axios.get(
-    `https://api.github.com/repos/${repo}/commits/${branch}`
-  )
+  const response = await axios.get<{
+    sha: string
+  }>(`https://api.github.com/repos/${repo}/commits/${branch}`)
   const latest = response.data.sha
   const current = execSync('git rev-parse HEAD').toString().trim()
   if (latest !== current) {
@@ -299,11 +316,14 @@ export async function checkLatest(): Promise<boolean> {
   return true
 }
 
-export function formatBytes(bytes: number, decimals?: number): string {
+export function formatBytes(bytes: number, dm = 2): string {
   if (bytes === 0) return '0 Bytes'
   const k = 1024
-  const dm = decimals || 2
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+  return (
+    Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)).toString() +
+    ' ' +
+    sizes[i]
+  )
 }
