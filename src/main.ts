@@ -16,14 +16,15 @@ import {
   sendDiscordMessage,
 } from './lib/utlis'
 
-const tsFilesDirPath = config.get('tsFilesDirPath')
-const outputDirPath = config.get('outputDirPath')
+const tsFilesDirPath = config.get<string>('tsFilesDirPath')
+const outputDirPath = config.get<string>('outputDirPath')
 
 async function main(): Promise<void> {
   const logger = Logger.configure('main')
   if (!(await checkLatest())) {
     logger.info('🆕 New version was found. Please update and restart it.')
     execSync('git pull')
+    // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1)
   }
 
@@ -54,7 +55,7 @@ async function main(): Promise<void> {
     const { dirname, filename } = result
     logger.info(`📁 Dirname: ${dirname}`)
     logger.info(`📄 Filename: ${filename}`)
-    if (dirname === null || filename === null) {
+    if (filename === null) {
       logger.warn(`❌ ${file.name}: dirname or filename is null. Skip`)
       continue
     }
@@ -74,26 +75,22 @@ async function main(): Promise<void> {
     logger.info(`🔢 Process ID: ${process.pid}`)
     logger.info(`🔢 Child Process ID: ${jlseProcess.pid}`)
 
-    jlseProcess.stdout.on('data', (chunk) => {
-      if (chunk.toString().trim().length === 0) return
-      if (
-        chunk.toString().trim().endsWith('%') ||
-        chunk.toString().trim().endsWith('\r')
-      ) {
-        process.stdout.write('\r' + chunk.toString().trim())
+    jlseProcess.stdout.on('data', (chunk: { toString: () => string }) => {
+      const strChunk = chunk.toString().trim()
+      if (strChunk.trim().length === 0) return
+      if (strChunk.trim().endsWith('%') || strChunk.trim().endsWith('\r')) {
+        process.stdout.write('\r' + strChunk.trim())
       } else {
-        logger.info(chunk.toString().trim())
+        logger.info(strChunk.trim())
       }
     })
-    jlseProcess.stderr.on('data', (chunk) => {
-      if (chunk.toString().trim().length === 0) return
-      if (
-        chunk.toString().trim().endsWith('%') ||
-        chunk.toString().trim().endsWith('\r')
-      ) {
-        process.stdout.write('\r' + chunk.toString().trim())
+    jlseProcess.stderr.on('data', (chunk: { toString: () => string }) => {
+      const strChunk = chunk.toString().trim()
+      if (strChunk.trim().length === 0) return
+      if (strChunk.trim().endsWith('%') || strChunk.trim().endsWith('\r')) {
+        process.stdout.write('\r' + strChunk.trim())
       } else {
-        logger.error(chunk.toString().trim())
+        logger.error(strChunk.trim())
       }
     })
 
@@ -121,7 +118,7 @@ async function main(): Promise<void> {
         {
           name: 'ファイルサイズ',
           value: formatBytes(
-            fs.statSync(path.join(outputDir, filename) + '.mp4').size
+            fs.statSync(path.join(outputDir, filename) + '.mp4').size,
           ),
         },
         {
