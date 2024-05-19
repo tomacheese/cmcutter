@@ -473,6 +473,15 @@ axios@1.6.8:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
+axios@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.0.tgz#b48f715325457ededfcb3f0a44a3fb9d5742acb6"
+  integrity sha512-IiB0wQeKyPRdsFVhBgIo31FbzOyf2M6wYl7/NVutFwFBRMiAbjNiydJIHKeLmPugF4kJLfA1uWZ82Is2QzqqFA==
+  dependencies:
+    follow-redirects "^1.15.6"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
 balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
