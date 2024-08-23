@@ -25,10 +25,10 @@
     js-tokens "^4.0.0"
     picocolors "^1.0.0"
 
-"@book000/eslint-config@1.7.41":
-  version "1.7.41"
-  resolved "https://registry.yarnpkg.com/@book000/eslint-config/-/eslint-config-1.7.41.tgz#9daa777ead6a460e1639b953fcbf394199cbe538"
-  integrity sha512-DNAutlcjdd1OEoUj2s4jTvVGhlmP9WzP1RJ//vbgyapoZy+cNnsVYSsK7PoFkM8dTVpPLIZG31fbyQQQkx1yiA==
+"@book000/eslint-config@1.7.42":
+  version "1.7.42"
+  resolved "https://registry.yarnpkg.com/@book000/eslint-config/-/eslint-config-1.7.42.tgz#f82d69f3a7035128436c4041ad7fdd44fc5831f9"
+  integrity sha512-WVkOfLrX/QgF6IsGC3BjKtwx3JsVw8ahRZ+Dy0TJcHen1GHz51ehU4JQK0Tt+pWK79tSCdj3hy49NkKjiQTMQA==
   dependencies:
     "@eslint/eslintrc" "3.1.0"
     "@typescript-eslint/parser" "8.2.0"
@@ -465,15 +465,6 @@ available-typed-arrays@^1.0.7:
   integrity sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==
   dependencies:
     possible-typed-array-names "^1.0.0"
-
-axios@1.7.4:
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.4.tgz#4c8ded1b43683c8dd362973c393f3ede24052aa2"
-  integrity sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==
-  dependencies:
-    follow-redirects "^1.15.6"
-    form-data "^4.0.0"
-    proxy-from-env "^1.1.0"
 
 axios@1.7.5:
   version "1.7.5"
