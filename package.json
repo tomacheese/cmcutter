@@ -20,7 +20,7 @@
     "fix:prettier": "prettier --write src"
   },
   "devDependencies": {
-    "@book000/eslint-config": "1.7.118",
+    "@book000/eslint-config": "1.7.119",
     "@book000/node-utils": "1.13.402",
     "@types/config": "3.3.5",
     "@types/node": "22.10.2",
