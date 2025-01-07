@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@book000/eslint-config": "1.7.124",
-    "@book000/node-utils": "1.13.412",
+    "@book000/node-utils": "1.13.413",
     "@types/config": "3.3.5",
     "@types/node": "22.10.5",
     "axios": "1.7.9",
