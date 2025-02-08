@@ -21,8 +21,6 @@
     "eslint-plugin-unicorn": "56.0.1",
     "prettier": "3.4.2",
     "run-z": "2.1.0",
-    "ts-node": "10.9.2",
-    "ts-node-dev": "2.0.0",
     "tsx": "4.19.2",
     "typescript": "5.7.3",
     "yarn-run-all": "3.1.1"
@@ -36,7 +34,6 @@
     "type": "git"
   },
   "scripts": {
-    "build": "ts-node --files ./src/main.ts",
     "compile": "tsc -p .",
     "compile:test": "tsc -p . --noEmit",
     "dev": "tsx watch ./src/main.ts",
