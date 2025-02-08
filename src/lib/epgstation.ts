@@ -62,7 +62,7 @@ export class EPGStation {
 
   public async getChannels(): Promise<EPGChannel[]> {
     const response = await axios.get<EPGChannel[]>(
-      'http://localhost:8888/api/channels',
+      'http://localhost:8888/api/channels'
     )
     return response.data
   }

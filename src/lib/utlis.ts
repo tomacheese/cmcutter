@@ -13,21 +13,21 @@ export function formatDate(date: Date, format: string): string {
   format = format.replaceAll('yyyy', String(date.getFullYear()))
   format = format.replaceAll(
     'MM',
-    ('0' + (date.getMonth() + 1).toString()).slice(-2),
+    ('0' + (date.getMonth() + 1).toString()).slice(-2)
   )
   format = format.replaceAll('dd', ('0' + date.getDate().toString()).slice(-2))
   format = format.replaceAll('HH', ('0' + date.getHours().toString()).slice(-2))
   format = format.replaceAll(
     'mm',
-    ('0' + date.getMinutes().toString()).slice(-2),
+    ('0' + date.getMinutes().toString()).slice(-2)
   )
   format = format.replaceAll(
     'ss',
-    ('0' + date.getSeconds().toString()).slice(-2),
+    ('0' + date.getSeconds().toString()).slice(-2)
   )
   format = format.replaceAll(
     'SSS',
-    ('00' + date.getMilliseconds().toString()).slice(-3),
+    ('00' + date.getMilliseconds().toString()).slice(-3)
   )
   return format
 }
@@ -56,8 +56,8 @@ export function getTSFiles(dirPath: string, subPath: string): File[] {
       files.push(
         ...getTSFiles(
           dirPath,
-          `${subPath === '' ? '' : subPath + '/'}${filename}`,
-        ),
+          `${subPath === '' ? '' : subPath + '/'}${filename}`
+        )
       )
     }
   }
@@ -104,7 +104,7 @@ export function toHalf(str: string): string {
 export async function processFileName(
   recordeds: EPGRecorded[],
   channels: EPGChannel[],
-  file: File,
+  file: File
 ): Promise<{
   dirname: string
   filename: string | null
@@ -115,7 +115,7 @@ export async function processFileName(
     : file.name
 
   const recorded = recordeds.find((record) =>
-    record.videoFiles.find((f) => f.filename === file.name),
+    record.videoFiles.find((f) => f.filename === file.name)
   )
   if (!recorded) {
     logger.error(`❗ ${file.name} is get recorded failed`)
@@ -149,7 +149,7 @@ export async function processFileName(
   const syoboiItem = result.find(
     (r) =>
       toHalf(recorded.name).includes(toHalf(r.Title)) ||
-      toHalf(r.Title).includes(toHalf(recorded.name)),
+      toHalf(r.Title).includes(toHalf(recorded.name))
   )
   if (!syoboiItem) {
     logger.error(`❗ ${file.name} is get syoboi item failed`)
@@ -164,7 +164,7 @@ export async function processFileName(
     new Date(recorded.endAt).getTime() - Date.now() < 1000 * 60 * 60 * 24 * 3
   ) {
     logger.error(
-      `❗ ${file.name} is get syoboi item failed (SubTitle or Count is null)`,
+      `❗ ${file.name} is get syoboi item failed (SubTitle or Count is null)`
     )
     return {
       dirname: originalDirname,
@@ -180,7 +180,7 @@ export async function processFileName(
 export function getJLSECommand(
   inputPath: string,
   outputDir: string,
-  outputFileName: string,
+  outputFileName: string
 ): string[] {
   if (!inputPath.endsWith('.ts')) {
     throw new Error('inputPath is not ts')
@@ -258,7 +258,7 @@ interface DiscordMessageEmbed {
 
 export async function sendDiscordMessage(
   content: string,
-  embed: DiscordMessageEmbed,
+  embed: DiscordMessageEmbed
 ): Promise<void> {
   const logger = Logger.configure('Utils.sendDiscordMessage')
   const discordChannelId = config.get<string>('discordChannelId')
@@ -274,7 +274,7 @@ export async function sendDiscordMessage(
         'Content-Type': 'application/json',
         Authorization: `Bot ${discordToken}`,
       },
-    },
+    }
   )
   logger.info(`📧 sendDiscordMessage: ${response.status}`)
 }

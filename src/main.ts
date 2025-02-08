@@ -118,7 +118,7 @@ async function main(): Promise<void> {
         {
           name: 'ファイルサイズ',
           value: formatBytes(
-            fs.statSync(path.join(outputDir, filename) + '.mp4').size,
+            fs.statSync(path.join(outputDir, filename) + '.mp4').size
           ),
         },
         {
