@@ -1,0 +1,45 @@
+{
+  "name": "cmcutter",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
+  "otherPortsAttributes": {
+    "onAutoForward": "silent"
+  },
+  "postCreateCommand": "pnpm install",
+  "waitFor": "postCreateCommand",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "git.branchProtection": [
+          "main",
+          "master"
+        ],
+        "editor.formatOnSave": true,
+        "[typescript]": {
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "never"
+          },
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      },
+      "extensions": [
+        "esbenp.prettier-vscode"
+      ]
+    },
+    "extensions": [
+      "esbenp.prettier-vscode"
+    ],
+    "settings": {
+      "git.branchProtection": [
+        "main",
+        "master"
+      ],
+      "editor.formatOnSave": true,
+      "[typescript]": {
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": false
+        },
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      }
+    }
+  }
+}

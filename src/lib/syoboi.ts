@@ -71,7 +71,7 @@ interface SyoboiJsonResult {
 
 export class Syoboi {
   public async requestJSON(
-    options: SyoboiJsonOptions,
+    options: SyoboiJsonOptions
   ): Promise<SyoboiJsonResult> {
     const response = await axios.get<{
       Titles: Record<string, SyoboiJsonResult>
@@ -82,7 +82,7 @@ export class Syoboi {
   }
 
   public async requestRSS(
-    options: SyoboiRssOptions,
+    options: SyoboiRssOptions
   ): Promise<SyoboiRssResult[]> {
     const response = await axios.get<{
       items: SyoboiRssResult[]
