@@ -42,8 +42,8 @@ importers:
         specifier: 7.2.1
         version: 7.2.1(eslint@9.31.0)
       eslint-plugin-unicorn:
-        specifier: 59.0.1
-        version: 59.0.1(eslint@9.31.0)
+        specifier: 60.0.0
+        version: 60.0.0(eslint@9.31.0)
       prettier:
         specifier: 3.6.2
         version: 3.6.2
