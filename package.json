@@ -21,7 +21,7 @@
     "eslint-plugin-unicorn": "60.0.0",
     "prettier": "3.6.2",
     "run-z": "2.1.0",
-    "tsx": "4.20.4",
+    "tsx": "4.20.5",
     "typescript": "5.9.2"
   },
   "homepage": "https://github.com/tomacheese/cmcutter",
