@@ -10,7 +10,7 @@
     "@book000/eslint-config": "1.11.2",
     "@book000/node-utils": "1.18.125",
     "@types/config": "3.3.5",
-    "@types/node": "22.18.0",
+    "@types/node": "22.18.1",
     "axios": "1.11.0",
     "config": "4.1.1",
     "eslint": "9.34.0",
