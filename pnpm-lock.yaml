@@ -42,8 +42,8 @@ importers:
         specifier: 7.2.1
         version: 7.2.1(eslint@9.35.0)
       eslint-plugin-unicorn:
-        specifier: 61.0.0
-        version: 61.0.0(eslint@9.35.0)
+        specifier: 61.0.1
+        version: 61.0.1(eslint@9.35.0)
       prettier:
         specifier: 3.6.2
         version: 3.6.2
@@ -759,8 +759,8 @@ packages:
     peerDependencies:
       eslint: '>=9.29.0'
 
-  eslint-plugin-unicorn@61.0.0:
-    resolution: {integrity: sha512-98kDrky0XHb901dtxwp5y8miSToY85FNGh5qn3LadRz43aULBTEgqJo4BOTDU3eHNoteD9Wv+YdiOPIRpu6hAQ==}
+  eslint-plugin-unicorn@61.0.1:
+    resolution: {integrity: sha512-RwXXqS8oTxW7dVs6e4ZBpZkn1wB4qqNZSbCJektP8/Nzp/woJdfN/t7LVNcpGMZ57xWBs33K0ymZ7MV+VeQnbA==}
     engines: {node: ^20.10.0 || >=21.0.0}
     peerDependencies:
       eslint: '>=9.29.0'
@@ -2450,7 +2450,7 @@ snapshots:
       semver: 7.7.2
       strip-indent: 4.0.0
 
-  eslint-plugin-unicorn@61.0.0(eslint@9.35.0):
+  eslint-plugin-unicorn@61.0.1(eslint@9.35.0):
     dependencies:
       '@babel/helper-validator-identifier': 7.27.1
       '@eslint-community/eslint-utils': 4.9.0(eslint@9.35.0)
