@@ -37,4 +37,8 @@ pnpm install
 - 既存のプロジェクトルールがある場合はそれを優先する。
 
 ## リポジトリ固有
-- 目的: EPGStation で録画した TV 録画の TS ファイルを CM カットして、MP4 に変換し、必要に応じてファイル名を変更するプログラムです。個人利用目的にのみ使用しています。
+- 概要: Cut commercials from TS files of TV recordings with EPGStation, convert to MP4, and rename files as needed
+- 主要言語: TypeScript
+- パッケージマネージャー: pnpm
+- 主なエントリポイント: `src/main.ts`
+- CI 定義: `.github/workflows/` を参照
