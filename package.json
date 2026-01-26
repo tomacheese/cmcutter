@@ -7,7 +7,7 @@
     "url": "https://github.com/tomacheese/cmcutter/issues"
   },
   "devDependencies": {
-    "@book000/eslint-config": "1.12.41",
+    "@book000/eslint-config": "1.12.42",
     "@book000/node-utils": "1.24.37",
     "@types/config": "3.3.5",
     "@types/node": "24.10.9",
