@@ -21,8 +21,8 @@ importers:
         specifier: 24.10.12
         version: 24.10.12
       axios:
-        specifier: 1.13.4
-        version: 1.13.4
+        specifier: 1.13.5
+        version: 1.13.5
       config:
         specifier: 4.2.0
         version: 4.2.0
