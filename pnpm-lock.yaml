@@ -24,8 +24,8 @@ importers:
         specifier: 1.13.5
         version: 1.13.5
       config:
-        specifier: 4.2.0
-        version: 4.2.0
+        specifier: 4.2.1
+        version: 4.2.1
       eslint:
         specifier: 9.39.2
         version: 9.39.2
@@ -543,8 +543,8 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  config@4.2.0:
-    resolution: {integrity: sha512-mk+ugmNm+BWc2YRlwmuJkORUvUyEP6w9cDUKU2sljFLYI4StXjqGDqQTA2wITi8sYaRdC/PGOuktqy7+Y4PApw==}
+  config@4.2.1:
+    resolution: {integrity: sha512-i6zeN/G0RG0x45Xd0mEYDojE/x/ISSeaFWIbCTVvTI1YctI5nE1ywQlZuTR4O/QEa05yQqVgPLxUthY0UbnpsA==}
     engines: {node: '>= 20.0.0'}
 
   core-js-compat@3.48.0:
@@ -2076,7 +2076,7 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  config@4.2.0:
+  config@4.2.1:
     dependencies:
       json5: 2.2.3
 
