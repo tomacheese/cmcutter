@@ -15,8 +15,8 @@ importers:
         specifier: 1.24.101
         version: 1.24.101
       '@types/config':
-        specifier: 3.3.5
-        version: 3.3.5
+        specifier: 4.4.0
+        version: 4.4.0
       '@types/node':
         specifier: 24.12.0
         version: 24.12.0
@@ -295,8 +295,9 @@ packages:
     peerDependencies:
       eslint: '>=8.40.0'
 
-  '@types/config@3.3.5':
-    resolution: {integrity: sha512-itq2HtXQBrNUKwMNZnb9mBRE3T99VYCdl1gjST9rq+9kFaB1iMMGuDeZnP88qid73DnpAMKH9ZolqDpS1Lz7+w==}
+  '@types/config@4.4.0':
+    resolution: {integrity: sha512-+82/thz8il6uR6mWFuMTWyC+jSXE4PIZUPmAfKUDOuvNULq3BPLM+tSKsAe3eOIOMKx5azvg3Q3JljWV9yX7aw==}
+    deprecated: This is a stub types definition. config provides its own type definitions, so you do not need this installed.
 
   '@types/esrecurse@4.3.1':
     resolution: {integrity: sha512-xJBAbDifo5hpffDBuHl0Y8ywswbiAp/Wi7Y/GtAgSlZyIABppyurxVueOPE8LUQOxdlgi6Zqce7uoEpqNTeiUw==}
@@ -1823,7 +1824,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@types/config@3.3.5': {}
+  '@types/config@4.4.0':
+    dependencies:
+      config: 4.4.1
 
   '@types/esrecurse@4.3.1': {}
 
