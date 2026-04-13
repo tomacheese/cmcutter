@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 type requestJsonCommands =
   | 'TitleMedium'
   | 'TitleLarge'
@@ -73,23 +71,34 @@ export class Syoboi {
   public async requestJSON(
     options: SyoboiJsonOptions
   ): Promise<SyoboiJsonResult> {
-    const response = await axios.get<{
+    const params = new URLSearchParams(
+      Object.entries(options).map(
+        ([k, v]) => [k, String(v)] as [string, string]
+      )
+    )
+    const res = await fetch(
+      `https://cal.syoboi.jp/json.php?${params.toString()}`
+    )
+    if (!res.ok) throw new Error(`Syoboi requestJSON failed: ${res.status}`)
+    const data = (await res.json()) as {
       Titles: Record<string, SyoboiJsonResult>
-    }>('https://cal.syoboi.jp/json.php', {
-      params: options,
-    })
-    return response.data.Titles[options.TID]
+    }
+    return data.Titles[options.TID]
   }
 
   public async requestRSS(
     options: SyoboiRssOptions
   ): Promise<SyoboiRssResult[]> {
-    const response = await axios.get<{
-      items: SyoboiRssResult[]
-    }>('https://cal.syoboi.jp/rss2.php', {
-      params: options,
-    })
-
-    return response.data.items
+    const params = new URLSearchParams(
+      Object.entries(options).map(
+        ([k, v]) => [k, String(v)] as [string, string]
+      )
+    )
+    const res = await fetch(
+      `https://cal.syoboi.jp/rss2.php?${params.toString()}`
+    )
+    if (!res.ok) throw new Error(`Syoboi requestRSS failed: ${res.status}`)
+    const data = (await res.json()) as { items: SyoboiRssResult[] }
+    return data.items
   }
 }

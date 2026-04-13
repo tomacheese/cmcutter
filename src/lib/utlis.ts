@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { execSync } from 'node:child_process'
 import config from 'config'
 import fs from 'node:fs'
@@ -263,20 +262,22 @@ export async function sendDiscordMessage(
   const logger = Logger.configure('Utils.sendDiscordMessage')
   const discordChannelId = config.get<string>('discordChannelId')
   const discordToken = config.get<string>('discordToken')
-  const response = await axios.post(
+  const res = await fetch(
     `https://discord.com/api/channels/${discordChannelId}/messages`,
     {
-      content,
-      embeds: [embed],
-    },
-    {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bot ${discordToken}`,
       },
+      body: JSON.stringify({
+        content,
+        embeds: [embed],
+      }),
     }
   )
-  logger.info(`📧 sendDiscordMessage: ${response.status}`)
+  if (!res.ok) throw new Error(`sendDiscordMessage failed: ${res.status}`)
+  logger.info(`📧 sendDiscordMessage: ${res.status}`)
 }
 
 export function pad(num: number, size = 2): string {
@@ -303,10 +304,12 @@ export async function checkLatest(): Promise<boolean> {
   const branch = config.has('repo.branch')
     ? config.get<string>('repo.branch')
     : 'master'
-  const response = await axios.get<{
-    sha: string
-  }>(`https://api.github.com/repos/${repo}/commits/${branch}`)
-  const latest = response.data.sha
+  const res = await fetch(
+    `https://api.github.com/repos/${repo}/commits/${branch}`
+  )
+  if (!res.ok) throw new Error(`checkLatest failed: ${res.status}`)
+  const data = (await res.json()) as { sha: string }
+  const latest = data.sha
   const current = execSync('git rev-parse HEAD').toString().trim()
   if (latest !== current) {
     logger.error(`❗ checkLatest: ${current} is not latest: ${latest}`)
