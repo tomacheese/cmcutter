@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 interface EPGVideoFile {
   id: number
   name: string
@@ -47,23 +45,26 @@ export interface EPGChannel {
 
 export class EPGStation {
   public async getRecordeds(): Promise<EPGRecorded[]> {
-    const response = await axios.get<{
-      records: EPGRecorded[]
-    }>('http://localhost:8888/api/recorded?isHalfWidth=false&limit=300')
-    return response.data.records
+    const res = await fetch(
+      'http://localhost:8888/api/recorded?isHalfWidth=false&limit=300'
+    )
+    if (!res.ok)
+      throw new Error(`EPGStation getRecordeds failed: ${res.status}`)
+    return ((await res.json()) as { records: EPGRecorded[] }).records
   }
 
   public async getRecordings(): Promise<EPGRecorded[]> {
-    const response = await axios.get<{
-      records: EPGRecorded[]
-    }>('http://localhost:8888/api/recording?&isHalfWidth=true&limit=300')
-    return response.data.records
+    const res = await fetch(
+      'http://localhost:8888/api/recording?&isHalfWidth=true&limit=300'
+    )
+    if (!res.ok)
+      throw new Error(`EPGStation getRecordings failed: ${res.status}`)
+    return ((await res.json()) as { records: EPGRecorded[] }).records
   }
 
   public async getChannels(): Promise<EPGChannel[]> {
-    const response = await axios.get<EPGChannel[]>(
-      'http://localhost:8888/api/channels'
-    )
-    return response.data
+    const res = await fetch('http://localhost:8888/api/channels')
+    if (!res.ok) throw new Error(`EPGStation getChannels failed: ${res.status}`)
+    return (await res.json()) as EPGChannel[]
   }
 }
