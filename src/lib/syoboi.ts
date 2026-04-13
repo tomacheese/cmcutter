@@ -72,7 +72,9 @@ export class Syoboi {
     options: SyoboiJsonOptions
   ): Promise<SyoboiJsonResult> {
     const params = new URLSearchParams(
-      Object.entries(options).map(([k, v]) => [k, String(v)] as [string, string])
+      Object.entries(options).map(
+        ([k, v]) => [k, String(v)] as [string, string]
+      )
     )
     const res = await fetch(`https://cal.syoboi.jp/json.php?${params}`)
     if (!res.ok) throw new Error(`Syoboi requestJSON failed: ${res.status}`)
@@ -86,7 +88,9 @@ export class Syoboi {
     options: SyoboiRssOptions
   ): Promise<SyoboiRssResult[]> {
     const params = new URLSearchParams(
-      Object.entries(options).map(([k, v]) => [k, String(v)] as [string, string])
+      Object.entries(options).map(
+        ([k, v]) => [k, String(v)] as [string, string]
+      )
     )
     const res = await fetch(`https://cal.syoboi.jp/rss2.php?${params}`)
     if (!res.ok) throw new Error(`Syoboi requestRSS failed: ${res.status}`)
