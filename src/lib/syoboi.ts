@@ -76,7 +76,7 @@ export class Syoboi {
         ([k, v]) => [k, String(v)] as [string, string]
       )
     )
-    const res = await fetch(`https://cal.syoboi.jp/json.php?${params}`)
+    const res = await fetch(`https://cal.syoboi.jp/json.php?${params.toString()}`)
     if (!res.ok) throw new Error(`Syoboi requestJSON failed: ${res.status}`)
     const data = (await res.json()) as {
       Titles: Record<string, SyoboiJsonResult>
@@ -92,7 +92,7 @@ export class Syoboi {
         ([k, v]) => [k, String(v)] as [string, string]
       )
     )
-    const res = await fetch(`https://cal.syoboi.jp/rss2.php?${params}`)
+    const res = await fetch(`https://cal.syoboi.jp/rss2.php?${params.toString()}`)
     if (!res.ok) throw new Error(`Syoboi requestRSS failed: ${res.status}`)
     const data = (await res.json()) as { items: SyoboiRssResult[] }
     return data.items
