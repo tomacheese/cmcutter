@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@book000/eslint-config':
-        specifier: 1.14.21
-        version: 1.14.21(eslint@10.3.0)(typescript@5.9.3)
+        specifier: 1.14.23
+        version: 1.14.23(eslint@10.3.0)(typescript@5.9.3)
       '@book000/node-utils':
         specifier: 1.24.151
         version: 1.24.151
@@ -60,10 +60,10 @@ packages:
     resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
     engines: {node: '>=6.9.0'}
 
-  '@book000/eslint-config@1.14.21':
-    resolution: {integrity: sha512-FRxtrWy2Lupkxlxa4MCb4/36e4JpERJPldAvRVdN7s1gnxWC0nwL0krymW7bvJaRLjDYvZaNsDNG4zmJIwJQsA==}
+  '@book000/eslint-config@1.14.23':
+    resolution: {integrity: sha512-LOGPwMEiFW3AFS+54b9PFhUylKSs3oYHImHzyTAEuMTYbXN2se0bY33T4acM204sRREAU3PPdTtyJ9ccrbga+g==}
     peerDependencies:
-      eslint: 10.2.1
+      eslint: 10.3.0
 
   '@book000/node-utils@1.24.151':
     resolution: {integrity: sha512-l6/25z4pSgRhlvVRr+PQ2UB9lM2WkD+d/sjDewTZZkWDP2cxHHKN3qm5P4KUwU6kB/7Vi0x8SF3PXarqeBiWYQ==}
@@ -894,10 +894,6 @@ packages:
     resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
     engines: {node: '>=18'}
 
-  globals@17.5.0:
-    resolution: {integrity: sha512-qoV+HK2yFl/366t2/Cb3+xxPUo5BuMynomoDmiaZBIdbs+0pYbjfZU+twLhGKp4uCZ/+NbtpVepH5bGCxRyy2g==}
-    engines: {node: '>=18'}
-
   globals@17.6.0:
     resolution: {integrity: sha512-sepffkT8stwnIYbsMBpoCHJuJM5l98FUF2AnE07hfvE0m/qp3R586hw4jF4uadbhvg1ooIdzuu7CsfD2jzCaNA==}
     engines: {node: '>=18'}
@@ -1609,13 +1605,13 @@ snapshots:
 
   '@babel/helper-validator-identifier@7.28.5': {}
 
-  '@book000/eslint-config@1.14.21(eslint@10.3.0)(typescript@5.9.3)':
+  '@book000/eslint-config@1.14.23(eslint@10.3.0)(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/parser': 8.59.1(eslint@10.3.0)(typescript@5.9.3)
       eslint: 10.3.0
       eslint-config-prettier: 10.1.8(eslint@10.3.0)
       eslint-plugin-unicorn: 64.0.0(eslint@10.3.0)
-      globals: 17.5.0
+      globals: 17.6.0
       neostandard: 0.13.0(eslint@10.3.0)(typescript@5.9.3)
       typescript-eslint: 8.59.1(eslint@10.3.0)(typescript@5.9.3)
     transitivePeerDependencies:
@@ -2583,8 +2579,6 @@ snapshots:
       is-glob: 4.0.3
 
   globals@15.15.0: {}
-
-  globals@17.5.0: {}
 
   globals@17.6.0: {}
 
