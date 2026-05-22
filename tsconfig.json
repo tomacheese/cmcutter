@@ -4,6 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "Node",
     "lib": ["ESNext", "esnext.AsyncIterable"],
+    "rootDir": "./src",
     "outDir": "./dist",
     "removeComments": true,
     "esModuleInterop": true,
@@ -23,6 +24,7 @@
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "newLine": "LF",
     "paths": {
       "@/*": ["src/*"]
