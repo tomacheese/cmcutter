@@ -124,8 +124,10 @@ export async function processFileName(
     logger.info(`❗ ${file.name} is encoding or recording`)
     return null
   }
-  const channel = channels.find((channel) => channel.id === recorded.channelId)
-  if (!channel) {
+  const hasChannel = channels.some(
+    (channel) => channel.id === recorded.channelId
+  )
+  if (!hasChannel) {
     logger.error(`❗ ${file.name} is get channel failed`)
     return null
   }
