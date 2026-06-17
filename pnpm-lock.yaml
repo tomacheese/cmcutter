@@ -39,8 +39,8 @@ importers:
         specifier: 7.3.0
         version: 7.3.0(eslint@10.5.0)
       eslint-plugin-unicorn:
-        specifier: 65.0.1
-        version: 65.0.1(eslint@10.5.0)
+        specifier: 66.0.0
+        version: 66.0.0(eslint@10.5.0)
       prettier:
         specifier: 3.8.4
         version: 3.8.4
@@ -752,6 +752,12 @@ packages:
     engines: {node: ^20.10.0 || >=21.0.0}
     peerDependencies:
       eslint: '>=9.38.0'
+
+  eslint-plugin-unicorn@66.0.0:
+    resolution: {integrity: sha512-+ywdy8T3foyZ2t3nRBujGa3vfOVMobHIi5iLB0L+fogdVO3EiUJ4BAyIacogWytnweLw3hgT70LQL9KoKTY/kA==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      eslint: '>=10.4'
 
   eslint-scope@9.1.2:
     resolution: {integrity: sha512-xS90H51cKw0jltxmvmHy2Iai1LIqrfbw57b79w/J7MfvDfkIkFZ+kj6zC3BjtUwh150HsSSdxXZcsuv72miDFQ==}
@@ -2414,6 +2420,26 @@ snapshots:
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.5.0)
+      change-case: 5.4.4
+      ci-info: 4.4.0
+      core-js-compat: 3.49.0
+      detect-indent: 7.0.2
+      eslint: 10.5.0
+      find-up-simple: 1.0.1
+      globals: 17.6.0
+      indent-string: 5.0.0
+      is-builtin-module: 5.0.0
+      jsesc: 3.1.0
+      pluralize: 8.0.0
+      regjsparser: 0.13.2
+      semver: 7.8.4
+      strip-indent: 4.1.1
+
+  eslint-plugin-unicorn@66.0.0(eslint@10.5.0):
+    dependencies:
+      '@babel/helper-validator-identifier': 7.29.7
+      '@eslint-community/eslint-utils': 4.9.1(eslint@10.5.0)
+      browserslist: 4.28.2
       change-case: 5.4.4
       ci-info: 4.4.0
       core-js-compat: 3.49.0
