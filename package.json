@@ -11,7 +11,7 @@
     "@book000/node-utils": "1.24.250",
     "@types/config": "4.4.0",
     "@types/node": "24.13.2",
-    "config": "4.4.1",
+    "config": "4.4.2",
     "eslint": "10.6.0",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.32.0",
