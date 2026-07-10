@@ -1,86 +1,27 @@
 # GitHub Copilot Instructions
 
-## プロジェクト概要
+このファイルは GitHub Copilot のコードレビュー向けの指示です。開発手順の網羅ではなく、レビュー時に重点確認すべき点に絞ります。プロジェクト全体の概要・コマンドは `CLAUDE.md` を参照。
 
-- **目的**: EPGStation で録画した TV 録画の TS ファイルを CM カットして、MP4 に変換し、必要に応じてファイル名を変更する。
-- **主な機能**:
-  - TS ファイルの CM カットと MP4 変換（Join Logo Scp Encoder (jlse) を使用）
-  - EPGStation からの録画情報の取得
-  - 処理済みファイルの一覧管理
-  - Discord への処理完了通知
-- **対象ユーザー**: 個人（開発者自身）
+## コンテキスト
 
-## 共通ルール
+EPGStation で録画した TS ファイルを jlse で CM カット・MP4 変換し、Discord へ通知する個人用ツール（TypeScript / Node.js / pnpm）。自動テストは無い。
 
-- 会話は日本語で行う。
-- PR とコミットは [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) に従う。
-  - `<type>(<scope>): <description>` 形式で、`<description>` は日本語。
-- ブランチ命名は [Conventional Branch](https://conventional-branch.github.io) に従う。
-  - `feat/`, `fix/` などの短縮形を使用。
-- 日本語と英数字の間には半角スペースを入れる。
+## レビューで重点確認する点
 
-## 技術スタック
+- **型安全性**: `any` の使用や暗黙の `any` を指摘する。`skipLibCheck: true` を有効化して型エラーを回避する変更は却下。
+- **エラーハンドリング**: 外部 I/O（EPGStation / しょぼいカレンダーへの HTTP、`jlse` の子プロセス実行、ファイル操作）で失敗が握り潰されていないか確認する。
+- **機密情報**: `discordToken` などの認証情報や `config/default.yml` の実値がコード・ログ・テストに混入していないか。
+- **外部コマンド実行**: `jlse` などをシェル実行する箇所で、ファイルパス等の入力が適切に扱われ、コマンドインジェクションの余地が無いか。
+- **命名規則**: 変数・関数 `camelCase`、クラス `PascalCase`、定数 `UPPER_SNAKE_CASE`。
+- **JSDoc**: 関数・インターフェースに日本語 JSDoc があるか。
+- **日本語と英数字の間の半角スペース**: コメント・ドキュメントで守られているか。
 
-- **言語**: TypeScript
-- **ランタイム**: Node.js (tsx)
-- **パッケージマネージャー**: pnpm
-- **主要ライブラリ**:
-  - `axios`: HTTP クライアント
-  - `config`: 設定管理
-  - `@book000/node-utils`: ユーティリティ
-  - `jlse`: CM カット・エンコード（外部コマンド）
+## フォーマット / Lint（自動強制）
 
-## 開発コマンド
+Prettier（セミコロンなし・シングルクォート・`printWidth: 80`）と ESLint（`@book000/eslint-config`）で強制される。`pnpm lint` が CI で実行されるため、純粋なスタイル差分は指摘不要。
 
-```bash
-# 依存関係のインストール
-pnpm install
+## フラグすべきでない既知パターン
 
-# 開発（ウォッチモード）
-pnpm dev
-
-# コンパイル
-pnpm compile
-
-# コンパイルチェック（エミットなし）
-pnpm compile:test
-
-# 静的解析とフォーマット修正
-pnpm fix
-
-# 静的解析
-pnpm lint
-
-# 実行
-pnpm start
-```
-
-## コーディング規約
-
-- **フォーマット**: Prettier を使用。
-  - `semi: false`
-  - `singleQuote: true`
-  - `tabWidth: 2`
-- **Lint**: ESLint を使用（`@book000/eslint-config`）。
-- **TypeScript**: `skipLibCheck` を有効にして回避しないこと。
-- **命名規則**: キャメルケースを基本とする。
-- **JSDoc**: 関数やインターフェースには日本語で docstring を記載する。
-
-## テスト方針
-
-- 現時点ではテストコードは含まれていないが、追加する場合は既存のディレクトリ構造に合わせること。
-
-## セキュリティ / 機密情報
-
-- `config/default.yml` などの設定ファイルに認証情報（Discord トークンなど）を直接記載してコミットしない。
-- ログに機密情報を出力しない。
-
-## ドキュメント更新
-
-- `README.md`
-- `memo.md`
-
-## リポジトリ固有
-
-- `/usr/bin/jlse` コマンドがシステムにインストールされていることを前提としている。
-- `config/` ディレクトリ配下に設定ファイルが必要。
+- `src/lib/utlis.ts` のファイル名は綴りが `utils` ではないが既存の意図的なもの。リネーム提案はしない。
+- `config/` ディレクトリはリポジトリに含まれない（Git 管理対象外で利用者が手動作成）。「存在しない」旨の指摘は不要。
+- コミットメッセージ・PR の `<description>` は日本語で記載する運用。英語化の提案はしない。
