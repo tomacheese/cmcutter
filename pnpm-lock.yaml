@@ -39,8 +39,8 @@ importers:
         specifier: 7.3.0
         version: 7.3.0(eslint@10.6.0)
       eslint-plugin-unicorn:
-        specifier: 71.0.0
-        version: 71.0.0(eslint@10.6.0)
+        specifier: 71.1.0
+        version: 71.1.0(eslint@10.6.0)
       prettier:
         specifier: 3.9.4
         version: 3.9.4
@@ -798,8 +798,8 @@ packages:
     peerDependencies:
       eslint: '>=9.38.0'
 
-  eslint-plugin-unicorn@71.0.0:
-    resolution: {integrity: sha512-9LAN/lIeEY8x1PsP10wOe1bFhNVJ4s3GWfy2FGiiZiKUd2JXVFKbjFaSVSWMKaVyKx1ulj3g5LMPKjWtvQntwg==}
+  eslint-plugin-unicorn@71.1.0:
+    resolution: {integrity: sha512-dn3YmR3qLLUeYyo/os3ubZ7UHQJ1WbBAgC9cIhnLTyMj9J6kivuc2U1fCmYetLexUlTDVYtBqhjSj/VaebTe6Q==}
     engines: {node: '>=22'}
     peerDependencies:
       eslint: '>=10.4'
@@ -2594,7 +2594,7 @@ snapshots:
       semver: 7.8.5
       strip-indent: 4.1.1
 
-  eslint-plugin-unicorn@71.0.0(eslint@10.6.0):
+  eslint-plugin-unicorn@71.1.0(eslint@10.6.0):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.6.0)
       browserslist: 4.28.4
