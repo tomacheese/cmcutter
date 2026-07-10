@@ -8,7 +8,8 @@ EPGStation で録画された TS ファイルを、Join Logo Scp Encoder (jlse) 
 
 - 言語: TypeScript / ランタイム: Node.js (tsx で直接実行、`.node-version` は 24.18.0)
 - パッケージマネージャー: pnpm (`preinstall` で pnpm 以外を拒否)
-- 主要ライブラリ: `axios`, `config`, `@book000/node-utils`
+- 主要ライブラリ: `config` (設定管理), `@book000/node-utils` (Logger)
+- HTTP 通信: Node.js 標準の `fetch` を使用（EPGStation / しょぼいカレンダー / Discord）。axios 等の HTTP クライアントは未使用
 - 外部ツール: `jlse` (`/usr/bin/jlse` に固定)
 
 ## 開発コマンド
