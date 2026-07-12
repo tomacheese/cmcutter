@@ -78,7 +78,10 @@ async function main(): Promise<void> {
     jlseProcess.stdout.on('data', (chunk: { toString: () => string }) => {
       const stringChunk = chunk.toString().trim()
       if (stringChunk.trim().length === 0) return
-      if (stringChunk.trim().endsWith('%') || stringChunk.trim().endsWith('\r')) {
+      if (
+        stringChunk.trim().endsWith('%') ||
+        stringChunk.trim().endsWith('\r')
+      ) {
         process.stdout.write('\r' + stringChunk.trim())
       } else {
         logger.info(stringChunk.trim())
@@ -87,7 +90,10 @@ async function main(): Promise<void> {
     jlseProcess.stderr.on('data', (chunk: { toString: () => string }) => {
       const stringChunk = chunk.toString().trim()
       if (stringChunk.trim().length === 0) return
-      if (stringChunk.trim().endsWith('%') || stringChunk.trim().endsWith('\r')) {
+      if (
+        stringChunk.trim().endsWith('%') ||
+        stringChunk.trim().endsWith('\r')
+      ) {
         process.stdout.write('\r' + stringChunk.trim())
       } else {
         logger.error(stringChunk.trim())

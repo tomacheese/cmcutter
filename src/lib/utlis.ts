@@ -10,29 +10,23 @@ const encodedDataFile = config.get<string>('encodedDataFile')
 
 export function formatDate(date: Date, format: string): string {
   format = format.replaceAll('yyyy', () => String(date.getFullYear()))
-  format = format.replaceAll(
-    'MM',
-    () => ('0' + (date.getMonth() + 1).toString()).slice(-2)
+  format = format.replaceAll('MM', () =>
+    ('0' + (date.getMonth() + 1).toString()).slice(-2)
   )
-  format = format.replaceAll(
-    'dd',
-    () => ('0' + date.getDate().toString()).slice(-2)
+  format = format.replaceAll('dd', () =>
+    ('0' + date.getDate().toString()).slice(-2)
   )
-  format = format.replaceAll(
-    'HH',
-    () => ('0' + date.getHours().toString()).slice(-2)
+  format = format.replaceAll('HH', () =>
+    ('0' + date.getHours().toString()).slice(-2)
   )
-  format = format.replaceAll(
-    'mm',
-    () => ('0' + date.getMinutes().toString()).slice(-2)
+  format = format.replaceAll('mm', () =>
+    ('0' + date.getMinutes().toString()).slice(-2)
   )
-  format = format.replaceAll(
-    'ss',
-    () => ('0' + date.getSeconds().toString()).slice(-2)
+  format = format.replaceAll('ss', () =>
+    ('0' + date.getSeconds().toString()).slice(-2)
   )
-  format = format.replaceAll(
-    'SSS',
-    () => ('00' + date.getMilliseconds().toString()).slice(-3)
+  format = format.replaceAll('SSS', () =>
+    ('00' + date.getMilliseconds().toString()).slice(-3)
   )
   return format
 }
@@ -60,7 +54,7 @@ export function getTSFiles(directoryPath: string, subPath: string): File[] {
     if (stat.isDirectory()) {
       files.push(
         ...getTSFiles(
-          dirPath,
+          directoryPath,
           `${subPath === '' ? '' : subPath + '/'}${filename}`
         )
       )
