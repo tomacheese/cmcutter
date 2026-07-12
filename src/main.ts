@@ -16,8 +16,8 @@ import {
   sendDiscordMessage,
 } from './lib/utlis'
 
-const tsFilesDirPath = config.get<string>('tsFilesDirPath')
-const outputDirPath = config.get<string>('outputDirPath')
+const tsFilesDirectoryPath = config.get<string>('tsFilesDirPath')
+const outputDirectoryPath = config.get<string>('outputDirPath')
 
 async function main(): Promise<void> {
   const logger = Logger.configure('main')
@@ -39,7 +39,7 @@ async function main(): Promise<void> {
   logger.info('📡 Fetch EPGStation Channels')
   const channels = await epg.getChannels()
 
-  const files = getTSFiles(tsFilesDirPath, '')
+  const files = getTSFiles(tsFilesDirectoryPath, '')
 
   for (const file of files) {
     if (isEncoded(file)) {
@@ -60,37 +60,37 @@ async function main(): Promise<void> {
       continue
     }
 
-    const outputDir = file.dirname.startsWith('anime')
-      ? path.join(outputDirPath, 'anime', dirname)
-      : path.join(outputDirPath, file.dirname)
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true })
+    const outputDirectory = file.dirname.startsWith('anime')
+      ? path.join(outputDirectoryPath, 'anime', dirname)
+      : path.join(outputDirectoryPath, file.dirname)
+    if (!fs.existsSync(outputDirectory)) {
+      fs.mkdirSync(outputDirectory, { recursive: true })
     }
 
-    const jlseCmd = getJLSECommand(file.path, outputDir, filename)
-    logger.info(`🚀 JLSE Command: /usr/bin/jlse ${jlseCmd.join(' ')}`)
+    const jlseCommand = getJLSECommand(file.path, outputDirectory, filename)
+    logger.info(`🚀 JLSE Command: /usr/bin/jlse ${jlseCommand.join(' ')}`)
 
     const jlseStartTime = performance.now()
-    const jlseProcess = spawn('/usr/bin/jlse', jlseCmd)
+    const jlseProcess = spawn('/usr/bin/jlse', jlseCommand)
     logger.info(`🔢 Process ID: ${process.pid}`)
     logger.info(`🔢 Child Process ID: ${jlseProcess.pid}`)
 
     jlseProcess.stdout.on('data', (chunk: { toString: () => string }) => {
-      const strChunk = chunk.toString().trim()
-      if (strChunk.trim().length === 0) return
-      if (strChunk.trim().endsWith('%') || strChunk.trim().endsWith('\r')) {
-        process.stdout.write('\r' + strChunk.trim())
+      const stringChunk = chunk.toString().trim()
+      if (stringChunk.trim().length === 0) return
+      if (stringChunk.trim().endsWith('%') || stringChunk.trim().endsWith('\r')) {
+        process.stdout.write('\r' + stringChunk.trim())
       } else {
-        logger.info(strChunk.trim())
+        logger.info(stringChunk.trim())
       }
     })
     jlseProcess.stderr.on('data', (chunk: { toString: () => string }) => {
-      const strChunk = chunk.toString().trim()
-      if (strChunk.trim().length === 0) return
-      if (strChunk.trim().endsWith('%') || strChunk.trim().endsWith('\r')) {
-        process.stdout.write('\r' + strChunk.trim())
+      const stringChunk = chunk.toString().trim()
+      if (stringChunk.trim().length === 0) return
+      if (stringChunk.trim().endsWith('%') || stringChunk.trim().endsWith('\r')) {
+        process.stdout.write('\r' + stringChunk.trim())
       } else {
-        logger.error(strChunk.trim())
+        logger.error(stringChunk.trim())
       }
     })
 
@@ -107,19 +107,20 @@ async function main(): Promise<void> {
     }
     addEncoded(file)
 
+    const outputFilePath = path.join(outputDirectory, filename) + '.mp4'
+    const outputFileSize = fs.statSync(outputFilePath).size
+
     await sendDiscordMessage('', {
       title: `CMカット完了`,
       description: `\`${file.name}\` を CMカットしました`,
       fields: [
         {
           name: '出力先',
-          value: path.join(outputDir, filename) + '.mp4',
+          value: outputFilePath,
         },
         {
           name: 'ファイルサイズ',
-          value: formatBytes(
-            fs.statSync(path.join(outputDir, filename) + '.mp4').size
-          ),
+          value: formatBytes(outputFileSize),
         },
         {
           name: 'エンコード処理時間',

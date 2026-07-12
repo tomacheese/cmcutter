@@ -71,16 +71,17 @@ export class Syoboi {
   public async requestJSON(
     options: SyoboiJsonOptions
   ): Promise<SyoboiJsonResult> {
-    const params = new URLSearchParams(
+    const parameters = new URLSearchParams(
       Object.entries(options).map(
         ([k, v]) => [k, String(v)] as [string, string]
       )
     )
-    const res = await fetch(
-      `https://cal.syoboi.jp/json.php?${params.toString()}`
+    const response = await fetch(
+      `https://cal.syoboi.jp/json.php?${parameters.toString()}`
     )
-    if (!res.ok) throw new Error(`Syoboi requestJSON failed: ${res.status}`)
-    const data = (await res.json()) as {
+    if (!response.ok)
+      throw new Error(`Syoboi requestJSON failed: ${response.status}`)
+    const data = (await response.json()) as {
       Titles: Record<string, SyoboiJsonResult>
     }
     return data.Titles[options.TID]
@@ -89,16 +90,17 @@ export class Syoboi {
   public async requestRSS(
     options: SyoboiRssOptions
   ): Promise<SyoboiRssResult[]> {
-    const params = new URLSearchParams(
+    const parameters = new URLSearchParams(
       Object.entries(options).map(
         ([k, v]) => [k, String(v)] as [string, string]
       )
     )
-    const res = await fetch(
-      `https://cal.syoboi.jp/rss2.php?${params.toString()}`
+    const response = await fetch(
+      `https://cal.syoboi.jp/rss2.php?${parameters.toString()}`
     )
-    if (!res.ok) throw new Error(`Syoboi requestRSS failed: ${res.status}`)
-    const data = (await res.json()) as { items: SyoboiRssResult[] }
+    if (!response.ok)
+      throw new Error(`Syoboi requestRSS failed: ${response.status}`)
+    const data = (await response.json()) as { items: SyoboiRssResult[] }
     return data.items
   }
 }

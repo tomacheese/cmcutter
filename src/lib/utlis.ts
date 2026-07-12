@@ -9,24 +9,30 @@ import { Syoboi } from './syoboi'
 const encodedDataFile = config.get<string>('encodedDataFile')
 
 export function formatDate(date: Date, format: string): string {
-  format = format.replaceAll('yyyy', String(date.getFullYear()))
+  format = format.replaceAll('yyyy', () => String(date.getFullYear()))
   format = format.replaceAll(
     'MM',
-    ('0' + (date.getMonth() + 1).toString()).slice(-2)
+    () => ('0' + (date.getMonth() + 1).toString()).slice(-2)
   )
-  format = format.replaceAll('dd', ('0' + date.getDate().toString()).slice(-2))
-  format = format.replaceAll('HH', ('0' + date.getHours().toString()).slice(-2))
+  format = format.replaceAll(
+    'dd',
+    () => ('0' + date.getDate().toString()).slice(-2)
+  )
+  format = format.replaceAll(
+    'HH',
+    () => ('0' + date.getHours().toString()).slice(-2)
+  )
   format = format.replaceAll(
     'mm',
-    ('0' + date.getMinutes().toString()).slice(-2)
+    () => ('0' + date.getMinutes().toString()).slice(-2)
   )
   format = format.replaceAll(
     'ss',
-    ('0' + date.getSeconds().toString()).slice(-2)
+    () => ('0' + date.getSeconds().toString()).slice(-2)
   )
   format = format.replaceAll(
     'SSS',
-    ('00' + date.getMilliseconds().toString()).slice(-3)
+    () => ('00' + date.getMilliseconds().toString()).slice(-3)
   )
   return format
 }
@@ -37,11 +43,11 @@ interface File {
   path: string
 }
 
-export function getTSFiles(dirPath: string, subPath: string): File[] {
-  const searchPath = path.join(dirPath, subPath)
+export function getTSFiles(directoryPath: string, subPath: string): File[] {
+  const searchPath = path.join(directoryPath, subPath)
   const files: File[] = []
-  const dirs = fs.readdirSync(searchPath)
-  for (const filename of dirs) {
+  const directories = fs.readdirSync(searchPath)
+  for (const filename of directories) {
     const path = `${searchPath}/${filename}`
     const stat = fs.statSync(path)
     if (stat.isFile() && path.endsWith('.ts')) {
@@ -81,8 +87,8 @@ export function addEncoded(file: File): void {
 }
 
 // https://github.com/l3tnun/EPGStation/blob/6dbcb58d6ab13b99b1489b5b0f60788f8b802599/src/util/StrUtil.ts#L64
-export function toHalf(str: string): string {
-  const tmp = str.replaceAll(/[！-～]/g, (s) => {
+export function toHalf(string_: string): string {
+  const temporary = string_.replaceAll(/[！-～]/g, (s) => {
     const c = s.codePointAt(0)
     if (!c) {
       return ''
@@ -90,13 +96,13 @@ export function toHalf(str: string): string {
     return String.fromCodePoint(c - 0xfe_e0)
   })
 
-  return tmp
+  return temporary
     .replaceAll('”', '"')
     .replaceAll('’', "'")
     .replaceAll('‘', '`')
     .replaceAll('￥', '\\')
 
-    .replaceAll('\u3000', ' ')
+    .replaceAll('\u{3000}', ' ')
     .replaceAll('〜', '~')
 }
 
@@ -180,7 +186,7 @@ export async function processFileName(
 
 export function getJLSECommand(
   inputPath: string,
-  outputDir: string,
+  outputDirectory: string,
   outputFileName: string
 ): string[] {
   if (!inputPath.endsWith('.ts')) {
@@ -193,7 +199,7 @@ export function getJLSECommand(
     '-t',
     'cutcm_logo',
     `-d`,
-    outputDir,
+    outputDirectory,
     `-n`,
     outputFileName,
     '-o',
@@ -264,7 +270,7 @@ export async function sendDiscordMessage(
   const logger = Logger.configure('Utils.sendDiscordMessage')
   const discordChannelId = config.get<string>('discordChannelId')
   const discordToken = config.get<string>('discordToken')
-  const res = await fetch(
+  const response = await fetch(
     `https://discord.com/api/channels/${discordChannelId}/messages`,
     {
       method: 'POST',
@@ -278,12 +284,13 @@ export async function sendDiscordMessage(
       }),
     }
   )
-  if (!res.ok) throw new Error(`sendDiscordMessage failed: ${res.status}`)
-  logger.info(`📧 sendDiscordMessage: ${res.status}`)
+  if (!response.ok)
+    throw new Error(`sendDiscordMessage failed: ${response.status}`)
+  logger.info(`📧 sendDiscordMessage: ${response.status}`)
 }
 
-export function pad(num: number, size = 2): string {
-  return ('00' + num.toString()).slice(-size)
+export function pad(number_: number, size = 2): string {
+  return ('00' + number_.toString()).slice(-size)
 }
 
 export function msToTime(s: number): string {
@@ -306,11 +313,11 @@ export async function checkLatest(): Promise<boolean> {
   const branch = config.has('repo.branch')
     ? config.get<string>('repo.branch')
     : 'master'
-  const res = await fetch(
+  const response = await fetch(
     `https://api.github.com/repos/${repo}/commits/${branch}`
   )
-  if (!res.ok) throw new Error(`checkLatest failed: ${res.status}`)
-  const data = (await res.json()) as { sha: string }
+  if (!response.ok) throw new Error(`checkLatest failed: ${response.status}`)
+  const data = (await response.json()) as { sha: string }
   const latest = data.sha
   const current = execSync('git rev-parse HEAD').toString().trim()
   if (latest !== current) {
@@ -325,10 +332,10 @@ export function formatBytes(bytes: number, dm = 2): string {
   if (bytes === 0) return '0 Bytes'
   const k = 1024
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  const index = Math.floor(Math.log(bytes) / Math.log(k))
   return (
-    Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)).toString() +
+    Number((bytes / Math.pow(k, index)).toFixed(dm)).toString() +
     ' ' +
-    sizes[i]
+    sizes[index]
   )
 }
