@@ -12,8 +12,8 @@ importers:
         specifier: 1.16.9
         version: 1.16.9(eslint@10.7.0)(typescript@6.0.3)
       '@book000/node-utils':
-        specifier: 1.24.287
-        version: 1.24.287
+        specifier: 1.24.288
+        version: 1.24.288
       '@types/config':
         specifier: 4.4.0
         version: 4.4.0
@@ -61,8 +61,8 @@ packages:
     peerDependencies:
       eslint: 10.7.0
 
-  '@book000/node-utils@1.24.287':
-    resolution: {integrity: sha512-dL8WhJuGT6h5l4JXYzrssFmi6OZyu7LdWPl5gVQUM++hU1bR84BwQKOqqQFehNvIXLjSX6o/b1ihET0wM/uU4w==}
+  '@book000/node-utils@1.24.288':
+    resolution: {integrity: sha512-YOLCsp3qNMIEovq4vK73cszKzDQOOd/rV9LjyT5GDjTt2vFhgfEiuBqskqRChW1LCun8YxmX9tFuzQAGYVWD+w==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -758,12 +758,6 @@ packages:
     engines: {node: '>=4'}
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
-
-  eslint-plugin-unicorn@71.1.0:
-    resolution: {integrity: sha512-dn3YmR3qLLUeYyo/os3ubZ7UHQJ1WbBAgC9cIhnLTyMj9J6kivuc2U1fCmYetLexUlTDVYtBqhjSj/VaebTe6Q==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      eslint: '>=10.4'
 
   eslint-plugin-unicorn@72.0.0:
     resolution: {integrity: sha512-hqO6ksoOHO+ZhdseTuKRVQbx9U7PRO/cv8qAR1mctwzdVO2hYud8uS9luAhp43RJgziYgHAph8eHyipT8GL0ng==}
@@ -1703,7 +1697,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@book000/node-utils@1.24.287':
+  '@book000/node-utils@1.24.288':
     dependencies:
       cycle: 1.0.3
       jsonc-parser: 3.3.1
@@ -2503,27 +2497,6 @@ snapshots:
       semver: 6.3.1
       string.prototype.matchall: 4.0.12
       string.prototype.repeat: 1.0.0
-
-  eslint-plugin-unicorn@71.1.0(eslint@10.7.0):
-    dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@10.7.0)
-      browserslist: 4.28.4
-      change-case: 5.4.4
-      ci-info: 4.4.0
-      core-js-compat: 3.49.0
-      detect-indent: 7.0.2
-      eslint: 10.7.0
-      find-up-simple: 1.0.1
-      globals: 17.7.0
-      indent-string: 5.0.0
-      is-builtin-module: 5.0.0
-      is-identifier: 1.1.0
-      pluralize: 8.0.0
-      quote-js-string: 0.1.0
-      regjsparser: 0.13.2
-      reserved-identifiers: 1.2.0
-      semver: 7.8.5
-      strip-indent: 4.1.1
 
   eslint-plugin-unicorn@72.0.0(eslint@10.7.0):
     dependencies:
