@@ -1,0 +1,3 @@
+config/default.yml
+config/local.yml
+config/*.yml
