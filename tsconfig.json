@@ -26,7 +26,8 @@
     "experimentalDecorators": true,
     "newLine": "LF",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "config": ["./src/types/config-shim.d.ts"]
     }
   },
   "include": ["src/**/*"]

@@ -14,9 +14,6 @@ importers:
       '@book000/node-utils':
         specifier: 1.25.45
         version: 1.25.45(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))
-      '@types/config':
-        specifier: 4.4.0
-        version: 4.4.0
       '@types/node':
         specifier: 24.13.3
         version: 24.13.3
@@ -396,10 +393,6 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.40.0'
-
-  '@types/config@4.4.0':
-    resolution: {integrity: sha512-+82/thz8il6uR6mWFuMTWyC+jSXE4PIZUPmAfKUDOuvNULq3BPLM+tSKsAe3eOIOMKx5azvg3Q3JljWV9yX7aw==}
-    deprecated: This is a stub types definition. config provides its own type definitions, so you do not need this installed.
 
   '@types/esrecurse@4.3.1':
     resolution: {integrity: sha512-xJBAbDifo5hpffDBuHl0Y8ywswbiAp/Wi7Y/GtAgSlZyIABppyurxVueOPE8LUQOxdlgi6Zqce7uoEpqNTeiUw==}
@@ -2126,10 +2119,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
-
-  '@types/config@4.4.0':
-    dependencies:
-      config: 5.0.0
 
   '@types/esrecurse@4.3.1': {}
 
