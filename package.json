@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/tomacheese/cmcutter",
   "main": "dist/index.js",
-  "packageManager": "pnpm@11.21.0",
+  "packageManager": "pnpm@11.22.0",
   "private": true,
   "repository": {
     "url": "git@github.com:tomacheese/cmcutter.git",
