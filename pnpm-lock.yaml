@@ -18,8 +18,8 @@ importers:
         specifier: 24.13.3
         version: 24.13.3
       config:
-        specifier: 5.0.0
-        version: 5.0.0
+        specifier: 5.0.1
+        version: 5.0.1
       eslint:
         specifier: 10.8.1
         version: 10.8.1
@@ -627,8 +627,8 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  config@5.0.0:
-    resolution: {integrity: sha512-LaZ/Z113nYJ4YNrH13dWdHvgIehYACiJZPxFVK8ykqO+6CaMAiJ7NkyrxTPAimMJoIKn7qPrvTFzIBPgm4/SLA==}
+  config@5.0.1:
+    resolution: {integrity: sha512-vnJGpQA9FjKSTafO9TiNZr1+NiZAIuZXScp034tH+R6VH3Ufe7r+Z730j/f6/KQ2+kNIly6auTYloIaNhpK8lg==}
     engines: {node: '>= 20.11.0'}
 
   convert-hrtime@5.0.0:
@@ -2399,7 +2399,7 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  config@5.0.0:
+  config@5.0.1:
     dependencies:
       json5: 2.2.3
 

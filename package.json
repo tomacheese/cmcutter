@@ -10,7 +10,7 @@
     "@book000/eslint-config": "1.16.40",
     "@book000/node-utils": "1.25.56",
     "@types/node": "24.13.3",
-    "config": "5.0.0",
+    "config": "5.0.1",
     "eslint": "10.8.1",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.32.0",
