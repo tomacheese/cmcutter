@@ -9,7 +9,7 @@
   "devDependencies": {
     "@book000/eslint-config": "1.16.66",
     "@book000/node-utils": "1.25.106",
-    "@types/node": "24.13.4",
+    "@types/node": "24.13.5",
     "config": "5.0.1",
     "eslint": "10.10.0",
     "eslint-config-standard": "17.1.0",
