@@ -84,10 +84,7 @@ export function addEncoded(file: File): void {
 export function toHalf(str: string): string {
   const tmp = str.replaceAll(/[！-～]/g, (s) => {
     const c = s.codePointAt(0)
-    if (!c) {
-      return ''
-    }
-    return String.fromCodePoint(c - 0xfe_e0)
+    return c ? String.fromCodePoint(c - 0xfe_e0) : ''
   })
 
   return tmp
