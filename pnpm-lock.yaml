@@ -167,8 +167,8 @@ importers:
   .:
     devDependencies:
       '@book000/eslint-config':
-        specifier: 1.16.71
-        version: 1.16.71(eslint@10.11.0)(typescript@6.0.3)
+        specifier: 1.16.72
+        version: 1.16.72(eslint@10.11.0)(typescript@6.0.3)
       '@book000/node-utils':
         specifier: 1.25.119
         version: 1.25.119(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))
@@ -211,8 +211,8 @@ importers:
 
 packages:
 
-  '@book000/eslint-config@1.16.71':
-    resolution: {integrity: sha512-zsYESc5MxAIsYhSwwGkWNOSakOfAgnSl7jBoIB0evj6b/lYRLpK83tUv0NJxmRIkfpfwr+GZ1UOtk9sni1deLQ==}
+  '@book000/eslint-config@1.16.72':
+    resolution: {integrity: sha512-VIfDzCvPcupeCrYPD6iiI++TZXEq2YFOvyMdFJ5jL4l3Bb9M+F3z8cReKD/AhOPRn0Y5qEPK+fIk0pvOztFUUQ==}
     peerDependencies:
       eslint: 10.11.0
 
@@ -1020,6 +1020,12 @@ packages:
 
   eslint-plugin-unicorn@75.0.0:
     resolution: {integrity: sha512-72I7eSn+/z5CpgValFBl9mp2JE5UPD+nUUyB/VIGUMF1rCP1i37mA05zfIAVIU312A+qCZ38T8tSZr3oaMv4Mw==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      eslint: '>=10.4'
+
+  eslint-plugin-unicorn@76.0.0:
+    resolution: {integrity: sha512-3ywJrCMHKYhcBP5yFzGaOOX3dY7+iR3hvpuoS/0EnhRFgVWLejly+t4fOdJvWQxJdHZl1C+QBW7hybXPDld4Pw==}
     engines: {node: '>=22'}
     peerDependencies:
       eslint: '>=10.4'
@@ -1928,12 +1934,12 @@ packages:
 
 snapshots:
 
-  '@book000/eslint-config@1.16.71(eslint@10.11.0)(typescript@6.0.3)':
+  '@book000/eslint-config@1.16.72(eslint@10.11.0)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/parser': 8.70.0(eslint@10.11.0)(typescript@6.0.3)
       eslint: 10.11.0
       eslint-config-prettier: 10.1.8(eslint@10.11.0)
-      eslint-plugin-unicorn: 75.0.0(eslint@10.11.0)
+      eslint-plugin-unicorn: 76.0.0(eslint@10.11.0)
       globals: 17.12.0
       neostandard: 0.13.0(eslint@10.11.0)(typescript@6.0.3)
       typescript-eslint: 8.70.0(eslint@10.11.0)(typescript@6.0.3)
@@ -2865,6 +2871,30 @@ snapshots:
       string.prototype.repeat: 1.0.0
 
   eslint-plugin-unicorn@75.0.0(eslint@10.11.0):
+    dependencies:
+      '@eslint-community/eslint-utils': 4.10.1(eslint@10.11.0)
+      '@eslint/css-tree': 4.1.0
+      browserslist: 4.28.9
+      change-case: 5.4.4
+      ci-info: 4.4.0
+      core-js-compat: 3.50.0
+      detect-indent: 7.0.2
+      entities: 8.0.0
+      eslint: 10.11.0
+      find-up-simple: 1.0.1
+      globals: 17.12.0
+      identifier-regex: 1.1.0
+      indent-string: 5.0.0
+      is-builtin-module: 5.0.0
+      pluralize: 8.0.0
+      quote-js-string: 0.1.0
+      regjsparser: 0.13.2
+      reserved-identifiers: 1.2.0
+      semver: 7.8.5
+      strip-indent: 4.1.1
+      yaml: 2.9.0
+
+  eslint-plugin-unicorn@76.0.0(eslint@10.11.0):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.11.0)
       '@eslint/css-tree': 4.1.0
