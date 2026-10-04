@@ -167,8 +167,8 @@ importers:
   .:
     devDependencies:
       '@book000/eslint-config':
-        specifier: 1.16.80
-        version: 1.16.80(eslint@10.11.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
+        specifier: 1.16.81
+        version: 1.16.81(eslint@10.11.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@book000/node-utils':
         specifier: 1.25.134
         version: 1.25.134(@babel/core@7.29.7(supports-color@8.1.1))
@@ -278,8 +278,8 @@ packages:
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
 
-  '@book000/eslint-config@1.16.80':
-    resolution: {integrity: sha512-t2aYEc9m4CF+W6241hRNKl+Zp+bQAhE2L6HTpouIcPqBiYxYcFabbS3pSLU1+DKv/B08nz02swGEsCKa06kCtw==}
+  '@book000/eslint-config@1.16.81':
+    resolution: {integrity: sha512-rq9+Xag7qQC60kfnh7NSRXItwe4ihhJZcOlTNBu/Aen5fSc0ja1W6F9gqEr+qh3VYirqnQkCcLiyGPBhWE5p2g==}
     peerDependencies:
       eslint: 10.11.0
 
@@ -1358,6 +1358,10 @@ packages:
     resolution: {integrity: sha512-cezEd/DTyyht9cvSSURyygXPfy04GtWO/5e6ZPvH7fCtjKz9PYOmuawphw1Ctd1f6C+5JypXfGD7ahNMXvevBA==}
     engines: {node: '>=18'}
 
+  globals@17.13.0:
+    resolution: {integrity: sha512-RwMTC61u7hrG3ZJMkZQOK4JLJrKS8QtoTii63EmWvFXHqycY9FObBJQCbsLxSO8kjKhWE5kV1GC+Vb1g3RI0Zg==}
+    engines: {node: '>=18'}
+
   globalthis@1.0.4:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
     engines: {node: '>= 0.4'}
@@ -2257,13 +2261,13 @@ snapshots:
       '@babel/helper-validator-identifier': 7.29.7
     optional: true
 
-  '@book000/eslint-config@1.16.80(eslint@10.11.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
+  '@book000/eslint-config@1.16.81(eslint@10.11.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/parser': 8.71.0(eslint@10.11.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       eslint: 10.11.0(supports-color@8.1.1)
       eslint-config-prettier: 10.1.8(eslint@10.11.0(supports-color@8.1.1))
       eslint-plugin-unicorn: 76.0.0(eslint@10.11.0(supports-color@8.1.1))
-      globals: 17.12.0
+      globals: 17.13.0
       neostandard: 0.13.0(eslint@10.11.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       typescript-eslint: 8.71.0(eslint@10.11.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
     transitivePeerDependencies:
@@ -3455,6 +3459,8 @@ snapshots:
   globals@15.15.0: {}
 
   globals@17.12.0: {}
+
+  globals@17.13.0: {}
 
   globalthis@1.0.4:
     dependencies:
