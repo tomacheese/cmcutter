@@ -167,8 +167,8 @@ importers:
   .:
     devDependencies:
       '@book000/eslint-config':
-        specifier: 1.16.83
-        version: 1.16.83(eslint@10.12.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
+        specifier: 1.16.84
+        version: 1.16.84(eslint@10.12.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@book000/node-utils':
         specifier: 1.25.142
         version: 1.25.142(@babel/core@7.29.7(supports-color@8.1.1))
@@ -278,8 +278,8 @@ packages:
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
 
-  '@book000/eslint-config@1.16.83':
-    resolution: {integrity: sha512-+CogOizAkAMbkq3ORQmFEQZ+f5sCsrKJDBaGwZH9Lm3OXeYWus7Sfg+TaDHU0i7lSPM+eorYVNJ1LBcKqiXIuA==}
+  '@book000/eslint-config@1.16.84':
+    resolution: {integrity: sha512-yOJ2rXr6Sq+KWi1SW8/UzqlIR5eTVz+yNuLEoJWcRA6uo7Nrwuq+olOV+2PoE57wYXtgG8BII6r0DfCsD3qZKA==}
     peerDependencies:
       eslint: 10.12.0
 
@@ -1192,12 +1192,6 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
 
-  eslint-plugin-unicorn@76.0.0:
-    resolution: {integrity: sha512-3ywJrCMHKYhcBP5yFzGaOOX3dY7+iR3hvpuoS/0EnhRFgVWLejly+t4fOdJvWQxJdHZl1C+QBW7hybXPDld4Pw==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      eslint: '>=10.4'
-
   eslint-plugin-unicorn@77.0.0:
     resolution: {integrity: sha512-aayznMCKTXlPAsoyUjRok862sz3BJAfxpQX/t79AT/uVQTmWsCx3FXfXo+9hfhL8aR2mMZQYyXoDZo3/ly6lJw==}
     engines: {node: '>=22'}
@@ -1358,10 +1352,6 @@ packages:
 
   globals@15.15.0:
     resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
-    engines: {node: '>=18'}
-
-  globals@17.12.0:
-    resolution: {integrity: sha512-cezEd/DTyyht9cvSSURyygXPfy04GtWO/5e6ZPvH7fCtjKz9PYOmuawphw1Ctd1f6C+5JypXfGD7ahNMXvevBA==}
     engines: {node: '>=18'}
 
   globals@17.13.0:
@@ -2267,12 +2257,12 @@ snapshots:
       '@babel/helper-validator-identifier': 7.29.7
     optional: true
 
-  '@book000/eslint-config@1.16.83(eslint@10.12.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
+  '@book000/eslint-config@1.16.84(eslint@10.12.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/parser': 8.71.0(eslint@10.12.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       eslint: 10.12.0(supports-color@8.1.1)
       eslint-config-prettier: 10.1.8(eslint@10.12.0(supports-color@8.1.1))
-      eslint-plugin-unicorn: 76.0.0(eslint@10.12.0(supports-color@8.1.1))
+      eslint-plugin-unicorn: 77.0.0(eslint@10.12.0(supports-color@8.1.1))
       globals: 17.13.0
       neostandard: 0.13.0(eslint@10.12.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       typescript-eslint: 8.71.0(eslint@10.12.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
@@ -3256,30 +3246,6 @@ snapshots:
       string.prototype.matchall: 4.1.0
       string.prototype.repeat: 1.0.0
 
-  eslint-plugin-unicorn@76.0.0(eslint@10.12.0(supports-color@8.1.1)):
-    dependencies:
-      '@eslint-community/eslint-utils': 4.10.1(eslint@10.12.0(supports-color@8.1.1))
-      '@eslint/css-tree': 4.1.1
-      browserslist: 4.29.1
-      change-case: 5.4.4
-      ci-info: 4.4.0
-      core-js-compat: 3.50.0
-      detect-indent: 7.0.2
-      entities: 8.1.0
-      eslint: 10.12.0(supports-color@8.1.1)
-      find-up-simple: 1.0.1
-      globals: 17.12.0
-      identifier-regex: 1.1.0
-      indent-string: 5.0.0
-      is-builtin-module: 5.0.0
-      pluralize: 8.0.0
-      quote-js-string: 0.1.0
-      regjsparser: 0.13.3
-      reserved-identifiers: 1.2.0
-      semver: 7.8.5
-      strip-indent: 4.1.1
-      yaml: 2.9.1
-
   eslint-plugin-unicorn@77.0.0(eslint@10.12.0(supports-color@8.1.1)):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.12.0(supports-color@8.1.1))
@@ -3487,8 +3453,6 @@ snapshots:
       path-scurry: 2.0.2
 
   globals@15.15.0: {}
-
-  globals@17.12.0: {}
 
   globals@17.13.0: {}
 
