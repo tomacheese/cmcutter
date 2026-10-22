@@ -28,6 +28,7 @@ EPGStation で録画された TS ファイルを、Join Logo Scp Encoder (jlse) 
 - `src/lib/epgstation.ts`: EPGStation API 連携
 - `src/lib/syoboi.ts`: しょぼいカレンダー連携（番組情報取得）
 - `src/lib/utlis.ts`: ユーティリティ（ファイル操作、エンコードコマンド生成など。ファイル名の綴りは既存のまま維持する）
+- `src/lib/outbox.ts`: 未送信の Discord 通知を保持・再送する outbox
 - `SystemdFiles/`: systemd の service / timer と `install-systemd.sh`
 - `config/`: 設定ファイル（Git 管理対象外。`config/default.yml` を手動作成）
 
@@ -62,4 +63,4 @@ EPGStation で録画された TS ファイルを、Join Logo Scp Encoder (jlse) 
 ## 特記事項
 
 - 実行には `jlse` が `/usr/bin/jlse` にインストールされている必要がある。
-- 設定は `config/default.yml` で行い、`tsFilesDirPath`, `outputDirPath`, `encodedDataFile`, `discordChannelId`, `discordToken` が必要。
+- 設定は `config/default.yml` で行い、`tsFilesDirPath`, `outputDirPath`, `encodedDataFile`, `discordChannelId`, `discordToken` が必要。任意項目として `notificationOutboxFile`（未送信の Discord 通知の保存先。未指定時は `<encodedDataFile>.outbox.json`）がある。

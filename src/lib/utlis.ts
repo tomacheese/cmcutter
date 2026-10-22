@@ -8,6 +8,20 @@ import { Syoboi } from './syoboi'
 
 const encodedDataFile = config.get<string>('encodedDataFile')
 
+const DISCORD_REQUEST_TIMEOUT_MS = 30_000
+
+/**
+ * 未送信の Discord 通知を保持する outbox ファイルのパスを返す。
+ * `notificationOutboxFile` 未設定時は `encodedDataFile` に `.outbox.json` を付けたパス
+ *
+ * @returns outbox ファイルのパス
+ */
+export function getNotificationOutboxFile(): string {
+  return config.has('notificationOutboxFile')
+    ? config.get<string>('notificationOutboxFile')
+    : `${encodedDataFile}.outbox.json`
+}
+
 export function formatDate(date: Date, format: string): string {
   format = format.replaceAll('yyyy', () => String(date.getFullYear()))
   format = format.replaceAll('MM', () =>
@@ -239,7 +253,7 @@ export interface EmbedField {
   inline?: boolean
 }
 
-interface DiscordMessageEmbed {
+export interface DiscordMessageEmbed {
   author?: MessageEmbedAuthor
   color?: number
   description?: string
@@ -273,6 +287,7 @@ export async function sendDiscordMessage(
         content,
         embeds: [embed],
       }),
+      signal: AbortSignal.timeout(DISCORD_REQUEST_TIMEOUT_MS),
     }
   )
   if (!res.ok) throw new Error(`sendDiscordMessage failed: ${res.status}`)

@@ -4,11 +4,13 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { EPGStation } from './lib/epgstation'
 import { Logger } from '@book000/node-utils'
+import { enqueueNotification, flushNotifications } from './lib/outbox'
 import {
   addEncoded,
   checkLatest,
   formatBytes,
   getJLSECommand,
+  getNotificationOutboxFile,
   getTSFiles,
   isEncoded,
   msToTime,
@@ -18,6 +20,21 @@ import {
 
 const tsFilesDirPath = config.get<string>('tsFilesDirPath')
 const outputDirPath = config.get<string>('outputDirPath')
+const outboxFile = getNotificationOutboxFile()
+
+/**
+ * outbox の未送信通知を Discord へ送信する。送信失敗では例外を投げない
+ *
+ * @param logger ログ出力に使う Logger
+ */
+async function flushOutbox(logger: Logger): Promise<void> {
+  const { failed } = await flushNotifications(outboxFile, (message) =>
+    sendDiscordMessage(message.content, message.embed)
+  )
+  if (failed > 0) {
+    logger.warn(`⚠️ ${failed} notification(s) remain in the outbox`)
+  }
+}
 
 async function main(): Promise<void> {
   const logger = Logger.configure('main')
@@ -27,6 +44,8 @@ async function main(): Promise<void> {
     // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1)
   }
+
+  await flushOutbox(logger)
 
   const epg = new EPGStation()
   logger.info('📡 Fetch EPGStation Recorded')
@@ -105,28 +124,42 @@ async function main(): Promise<void> {
       logger.error(`❌ ${file.name} is encoding failed`)
       continue
     }
+
+    const outputPath = path.join(outputDir, filename) + '.mp4'
+    let fileSize = '不明'
+    try {
+      fileSize = formatBytes(fs.statSync(outputPath).size)
+    } catch (error) {
+      logger.warn(
+        `❗ ${file.name}: failed to get output file size: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      )
+    }
+
+    // 通知を先に永続化する。処理済みにした後で通知が失われるのを避けるため
+    enqueueNotification(outboxFile, {
+      id: file.dirname + '/' + file.name,
+      message: {
+        content: '',
+        embed: {
+          title: `CMカット完了`,
+          description: `\`${file.name}\` を CMカットしました`,
+          fields: [
+            { name: '出力先', value: outputPath },
+            { name: 'ファイルサイズ', value: fileSize },
+            {
+              name: 'エンコード処理時間',
+              value: msToTime(jlseEndTime - jlseStartTime),
+            },
+          ],
+        },
+      },
+      createdAt: new Date().toISOString(),
+    })
     addEncoded(file)
 
-    await sendDiscordMessage('', {
-      title: `CMカット完了`,
-      description: `\`${file.name}\` を CMカットしました`,
-      fields: [
-        {
-          name: '出力先',
-          value: path.join(outputDir, filename) + '.mp4',
-        },
-        {
-          name: 'ファイルサイズ',
-          value: formatBytes(
-            fs.statSync(path.join(outputDir, filename) + '.mp4').size
-          ),
-        },
-        {
-          name: 'エンコード処理時間',
-          value: msToTime(jlseEndTime - jlseStartTime),
-        },
-      ],
-    })
+    await flushOutbox(logger)
   }
 }
 

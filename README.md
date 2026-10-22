@@ -19,6 +19,7 @@ File: `config/default.yml`
 - `encodedDataFile`: 処理済みファイルの一覧を保持するための JSON ファイルへのパス
 - `discordChannelId`: 処理が完了したことを通知する先の Discord チャンネル ID
 - `discordToken`: Discord への通知に使うトークン
+- `notificationOutboxFile`: (任意) 送信に失敗した Discord 通知を保持するための JSON ファイルへのパス。次回実行時に再送されます。未指定の場合は `<encodedDataFile>.outbox.json` を使います。ファイルが破損した場合は、手動で修復または削除してください
 
 ```yaml
 tsFilesDirPath: /path/to/recorded-dir/
