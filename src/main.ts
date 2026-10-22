@@ -12,8 +12,10 @@ import {
   getTSFiles,
   isEncoded,
   msToTime,
+  type ProcessCloseResult,
   processFileName,
   sendDiscordMessage,
+  waitForProcessClose,
 } from './lib/utlis'
 
 const tsFilesDirPath = config.get<string>('tsFilesDirPath')
@@ -72,6 +74,7 @@ async function main(): Promise<void> {
 
     const jlseStartTime = performance.now()
     const jlseProcess = spawn('/usr/bin/jlse', jlseCmd)
+    const closePromise = waitForProcessClose(jlseProcess)
     logger.info(`🔢 Process ID: ${process.pid}`)
     logger.info(`🔢 Child Process ID: ${jlseProcess.pid}`)
 
@@ -94,14 +97,23 @@ async function main(): Promise<void> {
       }
     })
 
-    await new Promise<void>((resolve) => {
-      jlseProcess.on('exit', () => {
-        resolve()
-      })
-    })
+    let closeResult: ProcessCloseResult
+    try {
+      closeResult = await closePromise
+    } catch (error) {
+      logger.error(
+        `❌ ${file.name}: failed to start jlse: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      )
+      continue
+    }
     const jlseEndTime = performance.now()
-    logger.info(`🔢 Exit Code: ${jlseProcess.exitCode}`)
-    if (jlseProcess.exitCode !== 0) {
+    logger.info(`🔢 Exit Code: ${closeResult.code}`)
+    if (closeResult.signal !== null) {
+      logger.info(`🔢 Signal: ${closeResult.signal}`)
+    }
+    if (closeResult.code !== 0 || closeResult.signal !== null) {
       logger.error(`❌ ${file.name} is encoding failed`)
       continue
     }

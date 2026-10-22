@@ -1,4 +1,4 @@
-import { execSync } from 'node:child_process'
+import { type ChildProcess, execSync } from 'node:child_process'
 import config from 'config'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -293,6 +293,34 @@ export function msToTime(s: number): string {
     '.' +
     pad(s % 1000, 3)
   )
+}
+
+/**
+ * 子プロセスの終了結果
+ */
+export interface ProcessCloseResult {
+  /** 終了コード。シグナルで終了した場合は null */
+  code: number | null
+  /** 終了させたシグナル。シグナルで終了していない場合は null */
+  signal: NodeJS.Signals | null
+}
+
+/**
+ * 子プロセスの終了 (stdio が閉じた後) を待つ。
+ * 起動失敗 (ENOENT / EACCES など) の場合は、`error` イベントで受け取った Error で reject する。
+ * `error` イベントは次の tick で発火するため、`spawn` の直後に `await` を挟まず呼び出すこと。
+ * @param child 終了を待つ子プロセス
+ * @returns 終了コードとシグナル
+ */
+export function waitForProcessClose(
+  child: ChildProcess
+): Promise<ProcessCloseResult> {
+  return new Promise((resolve, reject) => {
+    child.once('error', reject)
+    child.once('close', (code, signal) => {
+      resolve({ code, signal })
+    })
+  })
 }
 
 export async function checkLatest(): Promise<boolean> {
