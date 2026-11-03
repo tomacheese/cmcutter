@@ -1,25 +1,34 @@
 # cmcutter
 
-EPGStation で録画した TV 録画の TS ファイルを CM カットして、MP4 に変換し、必要に応じてファイル名を変更するプログラムです。個人利用目的にのみ使用しています。
+A program that cuts commercials (CM) from TS files recorded by EPGStation, converts them to MP4, and renames the output as needed. It is intended for personal use only.
+
+## Requirements
+
+- Node.js (version in `.node-version`) and pnpm
+- [jlse](https://github.com/tobitti0/JoinLogoScpTrialSetLinux) installed at `/usr/bin/jlse`
+- EPGStation reachable at `http://localhost:8888`
 
 ## Installation
 
-1. `git clone https://github.com/book000/cmcutter.git`
+1. `git clone https://github.com/tomacheese/cmcutter.git`
 2. `cd cmcutter`
-3. Download dependencies packages: `yarn`
-4. Create a new file: `config/default.yml`, and edit the configuration
-5. Compile & Run: `yarn build`
+3. Install dependencies: `pnpm install`
+4. Create `config/default.yml` and edit the configuration
+5. Run: `pnpm start`
+
+If the local checkout is not at the latest commit of the remote branch, the program runs `git pull` and exits with code 1. Restart it to run the updated code.
 
 ## Configuration
 
 File: `config/default.yml`
 
-- `tsFilesDirPath`: EPGStation が録画した TS ファイルがあるディレクトリ
-- `outputDirPath`: 出力先ディレクトリ
-- `encodedDataFile`: 処理済みファイルの一覧を保持するための JSON ファイルへのパス
-- `discordChannelId`: 処理が完了したことを通知する先の Discord チャンネル ID
-- `discordToken`: Discord への通知に使うトークン
-- `notificationOutboxFile`: (任意) 送信に失敗した Discord 通知を保持するための JSON ファイルへのパス。次回実行時に再送されます。未指定の場合は `<encodedDataFile>.outbox.json` を使います。ファイルが破損した場合は、手動で修復または削除してください
+- `tsFilesDirPath`: directory containing the TS files recorded by EPGStation
+- `outputDirPath`: output directory
+- `encodedDataFile`: path to a JSON file that stores the list of processed files
+- `discordChannelId`: ID of the Discord channel to notify when processing completes
+- `discordToken`: token used to send notifications to Discord
+- `notificationOutboxFile`: (optional) path to a JSON file that stores Discord notifications that failed to send. They are resent on the next run. Defaults to `<encodedDataFile>.outbox.json`. If the file is corrupted, repair or delete it manually
+- `repo.repo` / `repo.branch`: (optional) repository and branch compared against `HEAD` by the update check. Default to `tomacheese/cmcutter` and `master`
 
 ```yaml
 tsFilesDirPath: /path/to/recorded-dir/

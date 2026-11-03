@@ -2,16 +2,13 @@ import fs from 'node:fs'
 import { Logger } from '@book000/node-utils'
 import type { DiscordMessageEmbed } from './utlis'
 
-/**
- * Discord に送信するメッセージ
- */
 export interface OutboxMessage {
   content: string
   embed: DiscordMessageEmbed
 }
 
 /**
- * 未送信通知 1 件分。`id` は encodedDataFile のキー (`dirname/name`) と同じ形式
+ * One pending notification. `id` uses the same format as the encodedDataFile key (`dirname/name`)
  */
 export interface OutboxEntry {
   id: string
@@ -19,30 +16,15 @@ export interface OutboxEntry {
   createdAt: string
 }
 
-/**
- * `flushNotifications` の結果
- */
 export interface FlushResult {
   sent: number
   failed: number
 }
 
-/**
- * 値が null でないオブジェクトか判定する
- *
- * @param value 判定する値
- * @returns オブジェクトなら true
- */
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
-/**
- * 値が OutboxEntry の形状を満たすか判定する
- *
- * @param value 判定する値
- * @returns OutboxEntry なら true
- */
 function isOutboxEntry(value: unknown): value is OutboxEntry {
   if (!isRecord(value)) return false
   if (typeof value.id !== 'string' || typeof value.createdAt !== 'string') {
@@ -57,10 +39,8 @@ function isOutboxEntry(value: unknown): value is OutboxEntry {
 }
 
 /**
- * outbox ファイルを読み込む。存在しなければ空配列を返す
- *
- * @param outboxPath outbox ファイルのパス
- * @returns 未送信通知の一覧
+ * Reads the outbox file. Returns an empty array if it does not exist.
+ * Throws if the file is malformed, so a corrupted outbox is never overwritten silently.
  */
 function readOutbox(outboxPath: string): OutboxEntry[] {
   if (!fs.existsSync(outboxPath)) {
@@ -90,12 +70,7 @@ function readOutbox(outboxPath: string): OutboxEntry[] {
   return entries as OutboxEntry[]
 }
 
-/**
- * outbox ファイルを一時ファイル経由で置き換えて書き込む
- *
- * @param outboxPath outbox ファイルのパス
- * @param entries 書き込む未送信通知の一覧
- */
+// Rename a temp file into place so a crash never leaves a partial outbox
 function writeOutbox(outboxPath: string, entries: OutboxEntry[]): void {
   const tempPath = `${outboxPath}.tmp`
   fs.writeFileSync(tempPath, JSON.stringify(entries, null, 2))
@@ -103,10 +78,7 @@ function writeOutbox(outboxPath: string, entries: OutboxEntry[]): void {
 }
 
 /**
- * 未送信通知を outbox に追加する。同じ `id` が既にあれば置き換える
- *
- * @param outboxPath outbox ファイルのパス
- * @param entry 追加する未送信通知
+ * Adds a pending notification to the outbox. Replaces any entry with the same `id`.
  */
 export function enqueueNotification(
   outboxPath: string,
@@ -118,12 +90,10 @@ export function enqueueNotification(
 }
 
 /**
- * outbox の未送信通知を先頭から順に送信する。送信に成功したものは 1 件ごとに
- * outbox から削除し、失敗したものは残して次の通知へ進む
+ * Sends pending notifications in order. Each successfully sent entry is removed
+ * from the outbox immediately; failed entries are kept and the next one is tried.
  *
- * @param outboxPath outbox ファイルのパス
- * @param send 1 件の通知を送信する関数
- * @returns 送信に成功した件数と失敗した件数
+ * @returns Number of sent and failed notifications
  */
 export async function flushNotifications(
   outboxPath: string,

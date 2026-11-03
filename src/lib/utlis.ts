@@ -11,10 +11,8 @@ const encodedDataFile = config.get<string>('encodedDataFile')
 const DISCORD_REQUEST_TIMEOUT_MS = 30_000
 
 /**
- * 未送信の Discord 通知を保持する outbox ファイルのパスを返す。
- * `notificationOutboxFile` 未設定時は `encodedDataFile` に `.outbox.json` を付けたパス
- *
- * @returns outbox ファイルのパス
+ * Returns the path of the outbox file that holds unsent Discord notifications.
+ * Falls back to `<encodedDataFile>.outbox.json` when `notificationOutboxFile` is unset.
  */
 export function getNotificationOutboxFile(): string {
   return config.has('notificationOutboxFile')
@@ -170,7 +168,8 @@ export async function processFileName(
       filename: notExtensionFileName,
     }
   }
-  // 3日以内の番組の場合、話数やサブタイトルがNULLだったらスキップするためにファイルタイトルにNULLを返す
+  // Syoboi may not have the episode number or subtitle yet. Return a null
+  // filename so the file is skipped and retried on a later run.
   if (
     (syoboiItem.SubTitle === null || syoboiItem.Count === null) &&
     new Date(recorded.endAt).getTime() - Date.now() < 1000 * 60 * 60 * 24 * 3
@@ -311,21 +310,19 @@ export function msToTime(s: number): string {
 }
 
 /**
- * 子プロセスの終了結果
+ * Result of a child process exit
  */
 export interface ProcessCloseResult {
-  /** 終了コード。シグナルで終了した場合は null */
+  /** Exit code. null if the process was terminated by a signal */
   code: number | null
-  /** 終了させたシグナル。シグナルで終了していない場合は null */
+  /** Terminating signal. null if the process was not terminated by a signal */
   signal: NodeJS.Signals | null
 }
 
 /**
- * 子プロセスの終了 (stdio が閉じた後) を待つ。
- * 起動失敗 (ENOENT / EACCES など) の場合は、`error` イベントで受け取った Error で reject する。
- * `error` イベントは次の tick で発火するため、`spawn` の直後に `await` を挟まず呼び出すこと。
- * @param child 終了を待つ子プロセス
- * @returns 終了コードとシグナル
+ * Waits for a child process to exit (after its stdio has closed).
+ * If the process fails to start (ENOENT / EACCES, etc.), rejects with the Error from the `error` event.
+ * The `error` event fires on the next tick, so call this immediately after `spawn` without an `await` in between.
  */
 export function waitForProcessClose(
   child: ChildProcess
