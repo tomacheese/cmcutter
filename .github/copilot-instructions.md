@@ -1,27 +1,19 @@
 # GitHub Copilot Instructions
 
-このファイルは GitHub Copilot のコードレビュー向けの指示です。開発手順の網羅ではなく、レビュー時に重点確認すべき点に絞ります。プロジェクト全体の概要・コマンドは `CLAUDE.md` を参照。
+Review focus points only. For the project overview, commands, and invariants, see `AGENTS.md`.
 
-## コンテキスト
+## Review focus
 
-EPGStation で録画した TS ファイルを jlse で CM カット・MP4 変換し、Discord へ通知する個人用ツール（TypeScript / Node.js / pnpm）。自動テストは無い。
+- **Type safety**: flag `any` (explicit or implicit). Reject changes that enable `skipLibCheck: true` to hide type errors.
+- **Error handling**: check that failures in external I/O (HTTP to EPGStation / Syoboi Calendar, the `jlse` child process, file operations) are not swallowed.
+- **Secrets**: check that `discordToken` or real values from `config/default.yml` do not leak into code, logs, or tests.
+- **Command execution**: `jlse` must stay a `spawn` call with an argument array; flag any path that builds a shell command string from file names.
+- **Processing order**: a file must be marked as encoded only after its notification is persisted to the outbox.
+- **Naming**: `camelCase` variables/functions, `PascalCase` classes, `UPPER_SNAKE_CASE` constants.
+- **Comments and docs**: written in English (see the language rules in `AGENTS.md`).
 
-## レビューで重点確認する点
+## Do not flag
 
-- **型安全性**: `any` の使用や暗黙の `any` を指摘する。`skipLibCheck: true` を有効化して型エラーを回避する変更は却下。
-- **エラーハンドリング**: 外部 I/O（EPGStation / しょぼいカレンダーへの HTTP、`jlse` の子プロセス実行、ファイル操作）で失敗が握り潰されていないか確認する。
-- **機密情報**: `discordToken` などの認証情報や `config/default.yml` の実値がコード・ログ・テストに混入していないか。
-- **外部コマンド実行**: `jlse` などをシェル実行する箇所で、ファイルパス等の入力が適切に扱われ、コマンドインジェクションの余地が無いか。
-- **命名規則**: 変数・関数 `camelCase`、クラス `PascalCase`、定数 `UPPER_SNAKE_CASE`。
-- **JSDoc**: 関数・インターフェースに日本語 JSDoc があるか。
-- **日本語と英数字の間の半角スペース**: コメント・ドキュメントで守られているか。
-
-## フォーマット / Lint（自動強制）
-
-Prettier（セミコロンなし・シングルクォート・`printWidth: 80`）と ESLint（`@book000/eslint-config`）で強制される。`pnpm lint` が CI で実行されるため、純粋なスタイル差分は指摘不要。
-
-## フラグすべきでない既知パターン
-
-- `src/lib/utlis.ts` のファイル名は綴りが `utils` ではないが既存の意図的なもの。リネーム提案はしない。
-- `config/` ディレクトリはリポジトリに含まれない（Git 管理対象外で利用者が手動作成）。「存在しない」旨の指摘は不要。
-- コミットメッセージ・PR の `<description>` は日本語で記載する運用。英語化の提案はしない。
+- Formatting that Prettier/ESLint enforce (`pnpm lint` runs in CI).
+- The file name `src/lib/utlis.ts` (misspelled on purpose; do not suggest renaming).
+- The missing `config/` directory (git-ignored; users create it manually).

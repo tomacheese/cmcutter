@@ -25,9 +25,7 @@ const outputDirPath = config.get<string>('outputDirPath')
 const outboxFile = getNotificationOutboxFile()
 
 /**
- * outbox の未送信通知を Discord へ送信する。送信失敗では例外を投げない
- *
- * @param logger ログ出力に使う Logger
+ * Sends pending outbox notifications to Discord. Send failures do not throw.
  */
 async function flushOutbox(logger: Logger): Promise<void> {
   const { failed } = await flushNotifications(outboxFile, (message) =>
@@ -149,7 +147,7 @@ async function main(): Promise<void> {
       )
     }
 
-    // 通知を先に永続化する。処理済みにした後で通知が失われるのを避けるため
+    // Persist the notification before marking the file as encoded, so a notification is never lost after the file is recorded as processed
     enqueueNotification(outboxFile, {
       id: file.dirname + '/' + file.name,
       message: {
