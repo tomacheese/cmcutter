@@ -170,8 +170,8 @@ importers:
         specifier: 1.16.118
         version: 1.16.118(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@book000/node-utils':
-        specifier: 1.26.7
-        version: 1.26.7
+        specifier: 1.26.9
+        version: 1.26.9
       '@types/node':
         specifier: 26.6.6
         version: 26.6.6
@@ -216,8 +216,8 @@ packages:
     peerDependencies:
       eslint: 10.14.0
 
-  '@book000/node-utils@1.26.7':
-    resolution: {integrity: sha512-PjMMKcTvbYs6cIkNbAp/YRA+msuvK1b+V+skMVH4OLQA+hhEENH/PnDYBaJKewKGJpayxBXNEArZt9Di4vEAVQ==}
+  '@book000/node-utils@1.26.9':
+    resolution: {integrity: sha512-B95Oyn3gQtHZRoy7fuTG1ikEMmoBMdifKFmSp4tLp0Pw4V/eZ0Hut/U4MsxbEBt2iA7nssN+uyJtyeQP6sF99w==}
 
   '@cacheable/memory@2.2.0':
     resolution: {integrity: sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ==}
@@ -2098,7 +2098,7 @@ snapshots:
       - ts-declaration-location
       - typescript
 
-  '@book000/node-utils@1.26.7':
+  '@book000/node-utils@1.26.9':
     dependencies:
       '@sentry/node': 11.11.0
       cycle: 1.0.3
