@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import path from 'node:path'
 
 export function readEncodedData(encodedDataPath: string): string[] {
   if (!fs.existsSync(encodedDataPath)) {
@@ -27,6 +28,43 @@ export function readEncodedData(encodedDataPath: string): string[] {
   return parsed as string[]
 }
 
+function resolveWritePath(encodedDataPath: string): string {
+  let absolutePath = path.resolve(encodedDataPath)
+  const visited = new Set<string>()
+
+  while (true) {
+    if (visited.has(absolutePath)) {
+      throw new Error(
+        `Encoded data file contains a symbolic link cycle: ${absolutePath}`
+      )
+    }
+    visited.add(absolutePath)
+
+    let stat: fs.Stats
+    try {
+      stat = fs.lstatSync(absolutePath)
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        'code' in error &&
+        error.code === 'ENOENT'
+      ) {
+        return absolutePath
+      }
+      throw error
+    }
+
+    if (!stat.isSymbolicLink()) {
+      return absolutePath
+    }
+
+    absolutePath = path.resolve(
+      path.dirname(absolutePath),
+      fs.readlinkSync(absolutePath)
+    )
+  }
+}
+
 export function writeEncodedData(
   encodedDataPath: string,
   entries: string[],
@@ -34,7 +72,8 @@ export function writeEncodedData(
     fs.writeFileSync(tempPath, data)
   }
 ): void {
-  const tempPath = `${encodedDataPath}.tmp`
+  const writePath = resolveWritePath(encodedDataPath)
+  const tempPath = `${writePath}.tmp`
   writeTemp(tempPath, JSON.stringify(entries, null, 2))
-  fs.renameSync(tempPath, encodedDataPath)
+  fs.renameSync(tempPath, writePath)
 }

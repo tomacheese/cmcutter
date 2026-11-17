@@ -38,3 +38,20 @@ void test('reports malformed encoded data without changing the original file', (
     fs.rmSync(directory, { recursive: true, force: true })
   }
 })
+
+void test('preserves a symbolic link when replacing encoded data', () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'cmcutter-'))
+  const targetPath = path.join(directory, 'encoded-target.json')
+  const encodedDataPath = path.join(directory, 'encoded.json')
+  fs.writeFileSync(targetPath, '[\n  \"anime/previous.ts\"\n]')
+  fs.symlinkSync(targetPath, encodedDataPath)
+
+  try {
+    writeEncodedData(encodedDataPath, ['anime/next.ts'])
+
+    assert.equal(fs.lstatSync(encodedDataPath).isSymbolicLink(), true)
+    assert.deepEqual(readEncodedData(encodedDataPath), ['anime/next.ts'])
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true })
+  }
+})
