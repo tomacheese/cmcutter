@@ -5,6 +5,7 @@ import path from 'node:path'
 import { EPGChannel, EPGRecorded } from './epgstation'
 import { Logger } from '@book000/node-utils'
 import { Syoboi } from './syoboi'
+import { getSyoboiFileName } from './syoboi-utils'
 import {
   assertEncodedDataDirectoryWritable,
   readEncodedData,
@@ -171,12 +172,13 @@ export async function processFileName(
       filename: notExtensionFileName,
     }
   }
-  // Syoboi may not have the episode number or subtitle yet. Return a null
-  // filename so the file is skipped and retried on a later run.
-  if (
-    (syoboiItem.SubTitle === null || syoboiItem.Count === null) &&
-    new Date(recorded.endAt).getTime() - Date.now() < 1000 * 60 * 60 * 24 * 3
-  ) {
+  const filename = getSyoboiFileName(
+    syoboiItem.Title,
+    syoboiItem.Count,
+    syoboiItem.SubTitle,
+    new Date(recorded.endAt).getTime()
+  )
+  if (filename === null) {
     logger.error(
       `❗ ${file.name} is get syoboi item failed (SubTitle or Count is null)`
     )
@@ -187,7 +189,7 @@ export async function processFileName(
   }
   return {
     dirname: syoboiItem.Title,
-    filename: `${syoboiItem.Title} 第${syoboiItem.Count}話 ${syoboiItem.SubTitle}`,
+    filename,
   }
 }
 
