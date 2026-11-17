@@ -5,10 +5,10 @@ Review focus points only. For the project overview, commands, and invariants, se
 ## Review focus
 
 - **Type safety**: flag `any` (explicit or implicit). Reject changes that enable `skipLibCheck: true` to hide type errors.
-- **Error handling**: check that failures in external I/O (HTTP to EPGStation / Syoboi Calendar, the `jlse` child process, file operations) are not swallowed.
+- **Error handling**: check that failures in external I/O (HTTP to EPGStation / Syoboi Calendar, the `jlse` child process, file operations) are not swallowed. Encoded-index replacement requires a writable parent directory and must preserve the old index on failure.
 - **Secrets**: check that `discordToken` or real values from `config/default.yml` do not leak into code, logs, or tests.
 - **Command execution**: `jlse` must stay a `spawn` call with an argument array; flag any path that builds a shell command string from file names.
-- **Processing order**: a file must be marked as encoded only after its notification is persisted to the outbox.
+- **Processing order**: a file must be marked as encoded only after its notification is persisted to the outbox. Run regression tests with `pnpm test`.
 - **Naming**: `camelCase` variables/functions, `PascalCase` classes, `UPPER_SNAKE_CASE` constants.
 - **Comments and docs**: written in English (see the language rules in `AGENTS.md`).
 

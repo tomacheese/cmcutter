@@ -5,7 +5,11 @@ import path from 'node:path'
 import { EPGChannel, EPGRecorded } from './epgstation'
 import { Logger } from '@book000/node-utils'
 import { Syoboi } from './syoboi'
-import { readEncodedData, writeEncodedData } from './encoded-data'
+import {
+  assertEncodedDataDirectoryWritable,
+  readEncodedData,
+  writeEncodedData,
+} from './encoded-data'
 
 const encodedDataFile = config.get<string>('encodedDataFile')
 
@@ -74,6 +78,10 @@ export function getTSFiles(dirPath: string, subPath: string): File[] {
     }
   }
   return files
+}
+
+export function assertEncodedDataWritable(): void {
+  assertEncodedDataDirectoryWritable(encodedDataFile)
 }
 
 export function isEncoded(file: File): boolean {

@@ -19,10 +19,11 @@ Tech stack: TypeScript run directly with `tsx` (no build step), `config` for con
 - `pnpm start`: run once (`tsx ./src/main.ts`)
 - `pnpm compile`: `tsc -p .`
 - `pnpm compile:test`: type check only (`--noEmit`)
+- `pnpm test`: run the Node.js test suite with `tsx`
 - `pnpm lint`: Prettier + ESLint + tsc (run by CI)
 - `pnpm fix`: auto-fix with Prettier + ESLint
 
-There are no automated tests. After a change, run `pnpm lint`.
+Run `pnpm test` and `pnpm lint` after changes.
 
 ## Architecture
 

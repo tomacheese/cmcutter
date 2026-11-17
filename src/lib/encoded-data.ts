@@ -66,6 +66,19 @@ function resolveWritePath(encodedDataPath: string): string {
   }
 }
 
+export function assertEncodedDataDirectoryWritable(
+  encodedDataPath: string
+): void {
+  const directoryPath = path.dirname(resolveWritePath(encodedDataPath))
+  try {
+    fs.accessSync(directoryPath, fs.constants.W_OK | fs.constants.X_OK)
+  } catch (error) {
+    throw new Error(
+      `Encoded data directory is not writable: ${directoryPath} (${error instanceof Error ? error.message : String(error)})`
+    )
+  }
+}
+
 function removeTemporaryFile(tempPath: string): void {
   try {
     fs.rmSync(tempPath, { force: true })
