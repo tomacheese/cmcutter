@@ -55,3 +55,39 @@ void test('preserves a symbolic link when replacing encoded data', () => {
     fs.rmSync(directory, { recursive: true, force: true })
   }
 })
+
+void test('preserves the encoded data file mode when replacing it', () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'cmcutter-'))
+  const encodedDataPath = path.join(directory, 'encoded.json')
+  fs.writeFileSync(encodedDataPath, '[]', { mode: 0o600 })
+  fs.chmodSync(encodedDataPath, 0o600)
+
+  try {
+    writeEncodedData(encodedDataPath, ['anime/next.ts'])
+
+    assert.equal(fs.statSync(encodedDataPath).mode & 0o777, 0o600)
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true })
+  }
+})
+
+void test('resolves relative links from a symlinked physical parent', () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'cmcutter-'))
+  const physicalParentPath = path.join(directory, 'real', 'nested')
+  const logicalParentPath = path.join(directory, 'logical')
+  const targetPath = path.join(directory, 'encoded-target.json')
+  const encodedDataPath = path.join(logicalParentPath, 'encoded.json')
+  fs.mkdirSync(physicalParentPath, { recursive: true })
+  fs.symlinkSync(path.join(directory, 'real'), logicalParentPath)
+  fs.writeFileSync(targetPath, '[]')
+  fs.symlinkSync('../../encoded-target.json', encodedDataPath)
+
+  try {
+    writeEncodedData(encodedDataPath, ['anime/next.ts'])
+
+    assert.deepEqual(readEncodedData(encodedDataPath), ['anime/next.ts'])
+    assert.equal(fs.lstatSync(encodedDataPath).isSymbolicLink(), true)
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true })
+  }
+})

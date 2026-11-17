@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { randomUUID } from 'node:crypto'
 
 export function readEncodedData(encodedDataPath: string): string[] {
   if (!fs.existsSync(encodedDataPath)) {
@@ -59,7 +60,7 @@ function resolveWritePath(encodedDataPath: string): string {
     }
 
     absolutePath = path.resolve(
-      path.dirname(absolutePath),
+      fs.realpathSync(path.dirname(absolutePath)),
       fs.readlinkSync(absolutePath)
     )
   }
@@ -69,11 +70,27 @@ export function writeEncodedData(
   encodedDataPath: string,
   entries: string[],
   writeTemp = (tempPath: string, data: string): void => {
-    fs.writeFileSync(tempPath, data)
+    fs.writeFileSync(tempPath, data, { flag: 'wx', mode: 0o600 })
   }
 ): void {
   const writePath = resolveWritePath(encodedDataPath)
-  const tempPath = `${writePath}.tmp`
+  let mode: number | undefined
+  try {
+    mode = fs.statSync(writePath).mode & 0o7777
+  } catch (error) {
+    if (!(
+      error instanceof Error &&
+      'code' in error &&
+      error.code === 'ENOENT'
+    )) {
+      throw error
+    }
+  }
+
+  const tempPath = `${writePath}.${randomUUID()}.tmp`
   writeTemp(tempPath, JSON.stringify(entries, null, 2))
+  if (mode !== undefined) {
+    fs.chmodSync(tempPath, mode)
+  }
   fs.renameSync(tempPath, writePath)
 }
