@@ -10,16 +10,19 @@ void test('keeps the previous encoded data when writing the temp file fails', ()
   const encodedDataPath = path.join(directory, 'encoded.json')
   const previousData = '[\n  "anime/previous.ts"\n]'
   fs.writeFileSync(encodedDataPath, previousData)
+  let failedTempPath = ''
 
   try {
     assert.throws(() => {
       writeEncodedData(encodedDataPath, ['anime/next.ts'], (tempPath, data) => {
+        failedTempPath = tempPath
         fs.writeFileSync(tempPath, data.slice(0, 5))
         throw new Error('simulated write failure')
       })
     }, /simulated write failure/)
 
     assert.equal(fs.readFileSync(encodedDataPath, 'utf8'), previousData)
+    assert.equal(fs.existsSync(failedTempPath), false)
   } finally {
     fs.rmSync(directory, { recursive: true, force: true })
   }

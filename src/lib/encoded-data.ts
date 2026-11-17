@@ -66,6 +66,14 @@ function resolveWritePath(encodedDataPath: string): string {
   }
 }
 
+function removeTemporaryFile(tempPath: string): void {
+  try {
+    fs.rmSync(tempPath, { force: true })
+  } catch {
+    return
+  }
+}
+
 export function writeEncodedData(
   encodedDataPath: string,
   entries: string[],
@@ -88,9 +96,14 @@ export function writeEncodedData(
   }
 
   const tempPath = `${writePath}.${randomUUID()}.tmp`
-  writeTemp(tempPath, JSON.stringify(entries, null, 2))
-  if (mode !== undefined) {
-    fs.chmodSync(tempPath, mode)
+  try {
+    writeTemp(tempPath, JSON.stringify(entries, null, 2))
+    if (mode !== undefined) {
+      fs.chmodSync(tempPath, mode)
+    }
+    fs.renameSync(tempPath, writePath)
+  } catch (error) {
+    removeTemporaryFile(tempPath)
+    throw error
   }
-  fs.renameSync(tempPath, writePath)
 }
