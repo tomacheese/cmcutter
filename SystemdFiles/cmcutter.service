@@ -6,7 +6,8 @@ After=network.target
 User=root
 Group=root
 WorkingDirectory=%WorkingDirectory%
-ExecStart=yarn build
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ExecStart=/usr/bin/env pnpm start
 Restart=on-failure
 Type=oneshot
 

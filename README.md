@@ -4,7 +4,7 @@ A program that cuts commercials (CM) from TS files recorded by EPGStation, conve
 
 ## Requirements
 
-- Node.js (version in `.node-version`) and pnpm
+- Node.js (version in `.node-version`) and pnpm. For the systemd service, install both in a system-wide executable path such as `/usr/local/bin` or `/usr/bin`.
 - [jlse](https://github.com/tobitti0/JoinLogoScpTrialSetLinux) installed at `/usr/bin/jlse`
 - EPGStation reachable at `http://localhost:8888`
 
@@ -15,6 +15,8 @@ A program that cuts commercials (CM) from TS files recorded by EPGStation, conve
 3. Install dependencies: `pnpm install`
 4. Create `config/default.yml` and edit the configuration
 5. Run: `pnpm start`
+
+To install the systemd timer, install Node.js and pnpm in the system-wide `PATH` used by services (`/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`), then run `bash SystemdFiles/install-systemd.sh`. The installer checks that both commands are available there.
 
 If the local checkout is not at the latest commit of the remote branch, the program runs `git pull` and exits with code 1. Restart it to run the updated code.
 
