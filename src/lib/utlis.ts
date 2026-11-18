@@ -5,6 +5,11 @@ import path from 'node:path'
 import { EPGChannel, EPGRecorded } from './epgstation'
 import { Logger } from '@book000/node-utils'
 import { Syoboi } from './syoboi'
+import {
+  assertEncodedDataDirectoryWritable,
+  readEncodedData,
+  writeEncodedData,
+} from './encoded-data'
 
 const encodedDataFile = config.get<string>('encodedDataFile')
 
@@ -75,21 +80,19 @@ export function getTSFiles(dirPath: string, subPath: string): File[] {
   return files
 }
 
+export function assertEncodedDataWritable(): void {
+  assertEncodedDataDirectoryWritable(encodedDataFile)
+}
+
 export function isEncoded(file: File): boolean {
-  if (!fs.existsSync(encodedDataFile)) {
-    return false
-  }
-  const data: string[] = JSON.parse(fs.readFileSync(encodedDataFile, 'utf8'))
+  const data = readEncodedData(encodedDataFile)
   return data.includes(file.dirname + '/' + file.name)
 }
 
 export function addEncoded(file: File): void {
-  if (!fs.existsSync(encodedDataFile)) {
-    fs.writeFileSync(encodedDataFile, '[]')
-  }
-  const data: string[] = JSON.parse(fs.readFileSync(encodedDataFile, 'utf8'))
+  const data = readEncodedData(encodedDataFile)
   data.push(file.dirname + '/' + file.name)
-  fs.writeFileSync(encodedDataFile, JSON.stringify(data, null, 2))
+  writeEncodedData(encodedDataFile, data)
 }
 
 // https://github.com/l3tnun/EPGStation/blob/6dbcb58d6ab13b99b1489b5b0f60788f8b802599/src/util/StrUtil.ts#L64

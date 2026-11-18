@@ -42,6 +42,7 @@
     "lint:prettier": "prettier --check src",
     "lint:tsc": "tsc",
     "preinstall": "npx only-allow pnpm",
-    "start": "tsx ./src/main.ts"
+    "start": "tsx ./src/main.ts",
+    "test": "tsx --test src/**/*.test.ts"
   }
 }

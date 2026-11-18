@@ -7,6 +7,7 @@ import { Logger } from '@book000/node-utils'
 import { enqueueNotification, flushNotifications } from './lib/outbox'
 import {
   addEncoded,
+  assertEncodedDataWritable,
   checkLatest,
   formatBytes,
   getJLSECommand,
@@ -46,6 +47,7 @@ async function main(): Promise<void> {
   }
 
   await flushOutbox(logger)
+  assertEncodedDataWritable()
 
   const epg = new EPGStation()
   logger.info('📡 Fetch EPGStation Recorded')
