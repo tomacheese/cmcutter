@@ -3,6 +3,11 @@ import config from 'config'
 import fs from 'node:fs'
 import path from 'node:path'
 import { EPGStation } from './lib/epgstation'
+import {
+  completeEncoding,
+  waitForProcessClose,
+  type ProcessCloseResult,
+} from './lib/encoding-completion'
 import { Logger } from '@book000/node-utils'
 import { enqueueNotification, flushNotifications } from './lib/outbox'
 import {
@@ -15,10 +20,8 @@ import {
   getTSFiles,
   isEncoded,
   msToTime,
-  type ProcessCloseResult,
   processFileName,
   sendDiscordMessage,
-  waitForProcessClose,
 } from './lib/utlis'
 
 const tsFilesDirPath = config.get<string>('tsFilesDirPath')
@@ -132,46 +135,46 @@ async function main(): Promise<void> {
     if (closeResult.signal !== null) {
       logger.info(`🔢 Signal: ${closeResult.signal}`)
     }
-    if (closeResult.code !== 0 || closeResult.signal !== null) {
-      logger.error(`❌ ${file.name} is encoding failed`)
-      continue
-    }
+    const completed = await completeEncoding(closeResult, async () => {
+      const outputPath = path.join(outputDir, filename) + '.mp4'
+      let fileSize = '不明'
+      try {
+        fileSize = formatBytes(fs.statSync(outputPath).size)
+      } catch (error) {
+        logger.warn(
+          `❗ ${file.name}: failed to get output file size: ${
+            error instanceof Error ? error.message : String(error)
+          }`
+        )
+      }
 
-    const outputPath = path.join(outputDir, filename) + '.mp4'
-    let fileSize = '不明'
-    try {
-      fileSize = formatBytes(fs.statSync(outputPath).size)
-    } catch (error) {
-      logger.warn(
-        `❗ ${file.name}: failed to get output file size: ${
-          error instanceof Error ? error.message : String(error)
-        }`
-      )
-    }
-
-    // Persist the notification before marking the file as encoded, so a notification is never lost after the file is recorded as processed
-    enqueueNotification(outboxFile, {
-      id: file.dirname + '/' + file.name,
-      message: {
-        content: '',
-        embed: {
-          title: `CMカット完了`,
-          description: `\`${file.name}\` を CMカットしました`,
-          fields: [
-            { name: '出力先', value: outputPath },
-            { name: 'ファイルサイズ', value: fileSize },
-            {
-              name: 'エンコード処理時間',
-              value: msToTime(jlseEndTime - jlseStartTime),
-            },
-          ],
+      // Persist the notification before marking the file as encoded, so a notification is never lost after the file is recorded as processed
+      enqueueNotification(outboxFile, {
+        id: file.dirname + '/' + file.name,
+        message: {
+          content: '',
+          embed: {
+            title: `CMカット完了`,
+            description: `\`${file.name}\` を CMカットしました`,
+            fields: [
+              { name: '出力先', value: outputPath },
+              { name: 'ファイルサイズ', value: fileSize },
+              {
+                name: 'エンコード処理時間',
+                value: msToTime(jlseEndTime - jlseStartTime),
+              },
+            ],
+          },
         },
-      },
-      createdAt: new Date().toISOString(),
-    })
-    addEncoded(file)
+        createdAt: new Date().toISOString(),
+      })
+      addEncoded(file)
 
-    await flushOutbox(logger)
+      await flushOutbox(logger)
+    })
+    if (!completed) {
+      logger.error(`❌ ${file.name} is encoding failed`)
+    }
   }
 }
 
