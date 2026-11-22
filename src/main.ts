@@ -1,5 +1,5 @@
 import { execSync, spawn } from 'node:child_process'
-import config from 'config'
+import config from './lib/config'
 import fs from 'node:fs'
 import path from 'node:path'
 import { EPGStation } from './lib/epgstation'

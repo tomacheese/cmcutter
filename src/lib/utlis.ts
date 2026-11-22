@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process'
-import config from 'config'
+import config from './config'
 import fs from 'node:fs'
 import path from 'node:path'
 import { EPGChannel, EPGRecorded } from './epgstation'
