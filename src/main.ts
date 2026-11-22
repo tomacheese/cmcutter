@@ -10,6 +10,7 @@ import {
 } from './lib/encoding-completion'
 import { Logger } from '@book000/node-utils'
 import { enqueueNotification, flushNotifications } from './lib/outbox'
+import { resolveInside } from './lib/safe-path'
 import {
   addEncoded,
   assertEncodedDataWritable,
@@ -84,9 +85,19 @@ async function main(): Promise<void> {
       continue
     }
 
-    const outputDir = file.dirname.startsWith('anime')
-      ? path.join(outputDirPath, 'anime', dirname)
-      : path.join(outputDirPath, file.dirname)
+    let outputDir: string
+    try {
+      outputDir = file.dirname.startsWith('anime')
+        ? resolveInside(path.join(outputDirPath, 'anime'), dirname)
+        : path.join(outputDirPath, file.dirname)
+    } catch (error) {
+      logger.error(
+        `❌ ${file.name}: unsafe output directory: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      )
+      continue
+    }
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true })
     }
