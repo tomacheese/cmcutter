@@ -32,7 +32,7 @@ Run `pnpm test` and `pnpm lint` after changes.
 - `src/lib/syoboi.ts`: Syoboi Calendar API client
 - `src/lib/utlis.ts`: helpers (file scan, encoded list, file name resolution, `jlse` arguments, Discord, self-update check). The misspelled file name is intentional; do not rename it
 - `src/lib/outbox.ts`: persistent outbox for unsent Discord notifications
-- `src/types/config-shim.d.ts`: type-check-only stub for `config`, wired through `paths` in `tsconfig.json`
+- `src/lib/config.ts`: the only module that loads `config` (through `require`, because the published types of `config` do not type-check). Do not import `config` anywhere else and do not map it through `paths` in `tsconfig.json`, since tsx would execute the mapped file at runtime
 - `SystemdFiles/`: systemd service/timer and `install-systemd.sh`
 - `config/`: configuration (git-ignored; create `config/default.yml` manually, see `README.md`)
 
