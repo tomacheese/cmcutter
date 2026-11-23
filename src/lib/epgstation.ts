@@ -44,22 +44,36 @@ export interface EPGChannel {
 }
 
 export class EPGStation {
-  public async getRecordeds(): Promise<EPGRecorded[]> {
-    const res = await fetch(
-      'http://localhost:8888/api/recorded?isHalfWidth=false&limit=300'
+  public getRecordeds(): Promise<EPGRecorded[]> {
+    return this.fetchAllRecords(
+      'getRecordeds',
+      'http://localhost:8888/api/recorded?isHalfWidth=false'
     )
-    if (!res.ok)
-      throw new Error(`EPGStation getRecordeds failed: ${res.status}`)
-    return ((await res.json()) as { records: EPGRecorded[] }).records
   }
 
-  public async getRecordings(): Promise<EPGRecorded[]> {
-    const res = await fetch(
-      'http://localhost:8888/api/recording?&isHalfWidth=true&limit=300'
+  public getRecordings(): Promise<EPGRecorded[]> {
+    return this.fetchAllRecords(
+      'getRecordings',
+      'http://localhost:8888/api/recording?isHalfWidth=true'
     )
-    if (!res.ok)
-      throw new Error(`EPGStation getRecordings failed: ${res.status}`)
-    return ((await res.json()) as { records: EPGRecorded[] }).records
+  }
+
+  private async fetchAllRecords(
+    name: string,
+    url: string
+  ): Promise<EPGRecorded[]> {
+    const limit = 300
+    const all: EPGRecorded[] = []
+    for (;;) {
+      const res = await fetch(`${url}&limit=${limit}&offset=${all.length}`)
+      if (!res.ok) throw new Error(`EPGStation ${name} failed: ${res.status}`)
+      const { records, total } = (await res.json()) as {
+        records: EPGRecorded[]
+        total: number
+      }
+      all.push(...records)
+      if (records.length === 0 || all.length >= total) return all
+    }
   }
 
   public async getChannels(): Promise<EPGChannel[]> {
