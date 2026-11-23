@@ -32,6 +32,7 @@ Run `pnpm test` and `pnpm lint` after changes.
 - `src/lib/syoboi.ts`: Syoboi Calendar API client
 - `src/lib/utlis.ts`: helpers (file scan, encoded list, file name resolution, `jlse` arguments, Discord, self-update check). The misspelled file name is intentional; do not rename it
 - `src/lib/outbox.ts`: persistent outbox for unsent Discord notifications
+- `src/lib/safe-path.ts`: pure helpers `sanitizePathComponent` (turns untrusted text such as a Syoboi title into one safe path component) and `resolveInside` (lexical containment check that throws when a path is the root or outside it). It must not import `config`
 - `src/lib/config.ts`: the only module that loads `config` (through `require`, because the published types of `config` do not type-check). Do not import `config` anywhere else and do not map it through `paths` in `tsconfig.json`, since tsx would execute the mapped file at runtime
 - `SystemdFiles/`: systemd service/timer and `install-systemd.sh`
 - `config/`: configuration (git-ignored; create `config/default.yml` manually, see `README.md`)
@@ -44,6 +45,7 @@ Conventions: `camelCase` for variables/functions, `PascalCase` for classes, `UPP
 - A file is recorded in `encodedDataFile` (key `dirname/name`) only after encoding succeeded (exit code 0, no signal) and its notification has been persisted to the outbox. Do not reorder these steps, or a notification can be lost after the file is marked as processed.
 - `flushNotifications` must not throw on send failure; failed entries stay in the outbox and are retried on the next run. A malformed outbox file must throw instead of being overwritten.
 - `processFileName` returns `filename: null` when Syoboi has no subtitle or episode count yet (it may not be published yet), and `main` skips those files so they are retried later.
+- Syoboi-derived directory and file names are sanitized to a single path component in `processFileName`, and `main` resolves the anime output directory with `resolveInside(path.join(outputDirPath, 'anime'), dirname)` before `mkdirSync` and `jlse`. A file that fails the check is skipped and never recorded in `encodedDataFile`.
 - `checkLatest` compares `HEAD` with the remote branch head (default `tomacheese/cmcutter` / `master`, overridable via `repo.repo` and `repo.branch`). If outdated, the process runs `git pull` and exits with code 1 so the service restarts on the new code.
 - When config keys change, update the README Configuration section. When dev commands or the directory structure change, update `AGENTS.md` and `.github/copilot-instructions.md`.
 - Never commit credentials such as `discordToken`, and never log them.

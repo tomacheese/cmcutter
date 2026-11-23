@@ -9,6 +9,7 @@ Review focus points only. For the project overview, commands, and invariants, se
 - **Secrets**: check that `discordToken` or real values from `config/default.yml` do not leak into code, logs, or tests.
 - **Command execution**: `jlse` must stay a `spawn` call with an argument array; flag any path that builds a shell command string from file names.
 - **Processing order**: a file must be marked as encoded only after its notification is persisted to the outbox. Run regression tests with `pnpm test`.
+- **Output paths**: names derived from Syoboi metadata must stay a single path component (`src/lib/safe-path.ts`), and the output directory must pass `resolveInside` before `mkdirSync`/`jlse`.
 - **Naming**: `camelCase` variables/functions, `PascalCase` classes, `UPPER_SNAKE_CASE` constants.
 - **Comments and docs**: written in English (see the language rules in `AGENTS.md`).
 

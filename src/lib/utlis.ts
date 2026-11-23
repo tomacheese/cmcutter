@@ -5,6 +5,7 @@ import path from 'node:path'
 import { EPGChannel, EPGRecorded } from './epgstation'
 import { Logger } from '@book000/node-utils'
 import { Syoboi } from './syoboi'
+import { sanitizePathComponent } from './safe-path'
 import { getSyoboiFileName } from './syoboi-utils'
 import {
   assertEncodedDataDirectoryWritable,
@@ -188,8 +189,8 @@ export async function processFileName(
     }
   }
   return {
-    dirname: syoboiItem.Title,
-    filename,
+    dirname: sanitizePathComponent(syoboiItem.Title),
+    filename: sanitizePathComponent(filename),
   }
 }
 
