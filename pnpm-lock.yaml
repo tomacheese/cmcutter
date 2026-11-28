@@ -189,8 +189,8 @@ importers:
         specifier: 1.16.123
         version: 1.16.123(eslint@10.15.0)(typescript@6.0.3)
       '@book000/node-utils':
-        specifier: 1.26.43
-        version: 1.26.43
+        specifier: 1.26.47
+        version: 1.26.47
       '@types/node':
         specifier: 26.6.7
         version: 26.6.7
@@ -235,8 +235,8 @@ packages:
     peerDependencies:
       eslint: 10.14.0
 
-  '@book000/node-utils@1.26.43':
-    resolution: {integrity: sha512-f5WwhOM4KONJsDMOUsbKBedj7HY3I7ezOfpCelJkmRGHJJX4PCmZU83lnRnQpzbbzqTYLmhavraQRwCGK3u40w==}
+  '@book000/node-utils@1.26.47':
+    resolution: {integrity: sha512-4/lwYIKPIp4UcsrHbRCnSDcwz6rEjakqeYRnnR+aIGZqxr9DSGjhQLQqN6zPiUTMjuw1kbpsAZ0L2IXDOi1+ag==}
 
   '@cacheable/memory@2.2.0':
     resolution: {integrity: sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ==}
@@ -2119,7 +2119,7 @@ snapshots:
       - ts-declaration-location
       - typescript
 
-  '@book000/node-utils@1.26.43':
+  '@book000/node-utils@1.26.47':
     dependencies:
       '@sentry/node': 11.17.0
       cycle: 1.0.3
